@@ -8,6 +8,7 @@ TranslateAny is a project that turns any OpenAI compatible system into translate
 
 ```
 git clone https://github.com/aazsamir/translateany.git
+cd translateany
 docker compose up
 ```
 or
