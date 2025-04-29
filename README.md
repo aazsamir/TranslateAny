@@ -4,6 +4,13 @@ TranslateAny is a project that turns any OpenAI compatible system into translate
 
 # Usage
 
+> **_NOTE:_** Before you start, [configure your application](#configuration).
+
+```
+git clone https://github.com/aazsamir/translateany.git
+docker compose up
+```
+or
 ```
 git clone https://github.com/aazsamir/translateany.git
 cd translateany
