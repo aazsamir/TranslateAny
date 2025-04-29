@@ -9,7 +9,7 @@ class Languages
     /**
      * @var array<string, string>
      */
-    private const array LANGUAGES = [
+    public const array LANGUAGES = [
         'auto' => 'auto',
         'aa' => 'Afar',
         'ab' => 'Abkhazian',

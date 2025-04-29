@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\OpenAI;
 
+use App\Engine\AvailableLanguage;
 use App\Engine\Languages;
 use App\Engine\TranslateEngine;
 use App\Engine\Translation;
@@ -71,6 +72,15 @@ readonly class OpenAIEngine implements TranslateEngine
 
     public function languages(): array
     {
-        return Languages::getLanguages();
+        $languages = [];
+
+        foreach (Languages::LANGUAGES as $code => $name) {
+            $languages[] = new AvailableLanguage(
+                language: $code,
+                targets: Languages::getLanguages(),
+            );
+        }
+
+        return $languages;
     }
 }
