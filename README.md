@@ -21,6 +21,8 @@ composer install
 
 Now, on `http://localhost:8000`, you can test your configuration on translation page and use API.
 
+![View](./docs/page.png)
+
 # Configuration
 
 Copy `app/Config/app.config.php.example` to `app/Config/app.config.php`.
