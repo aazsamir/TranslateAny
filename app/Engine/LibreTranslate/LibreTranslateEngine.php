@@ -9,24 +9,30 @@ use App\Engine\Detection;
 use App\Engine\DetectionEngine;
 use App\Engine\TranslateEngine;
 use App\Engine\Translation;
-use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Client\ClientInterface;
 
 readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
 {
     public function __construct(
         private string $url,
-        private Client $client,
+        private ClientInterface $client,
     ) {
     }
 
     public function detect(string $text): array
     {
-        $response = $this->client->post($this->url . '/detect', [
-            'json' => [
-                'q' => $text,
+        $request = new Request(
+            method: 'POST',
+            uri: $this->url . '/detect',
+            headers: [
+                'Content-Type' => 'application/json',
             ],
-        ]);
-
+            body: json_encode([
+                'q' => $text,
+            ]),
+        );
+        $response = $this->client->sendRequest($request);
         $response = json_decode($response->getBody()->getContents(), true);
 
         if (isset($response['error'])) {
@@ -63,10 +69,15 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
             $request['alternatives'] = $alternatives;
         }
 
-        $response = $this->client->post($this->url . '/translate', [
-            'json' => $request,
-        ]);
-
+        $request = new Request(
+            method: 'POST',
+            uri: $this->url . '/translate',
+            headers: [
+                'Content-Type' => 'application/json',
+            ],
+            body: json_encode($request),
+        );
+        $response = $this->client->sendRequest($request);
         $response = json_decode($response->getBody()->getContents(), true);
 
         if (isset($response['error'])) {
@@ -85,10 +96,14 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
 
     public function languages(): array
     {
-        $response = $this->client->get($this->url . '/languages', [
-            'json' => [],
-        ]);
-
+        $request = new Request(
+            method: 'GET',
+            uri: $this->url . '/languages',
+            headers: [
+                'Content-Type' => 'application/json',
+            ],
+        );
+        $response = $this->client->sendRequest($request);
         $response = json_decode($response->getBody()->getContents(), true);
 
         if (isset($response['error'])) {

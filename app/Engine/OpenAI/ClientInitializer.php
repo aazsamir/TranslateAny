@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Engine\OpenAI;
 
 use App\System\AppConfig;
-use OpenAI\Client;
+use OpenAI\Contracts\ClientContract;
 use Tempest\Container\Container;
 use Tempest\Container\Initializer;
 
@@ -16,7 +16,7 @@ final readonly class ClientInitializer implements Initializer
     ) {
     }
 
-    public function initialize(Container $container): Client
+    public function initialize(Container $container): ClientContract
     {
         if (! ($this->appConfig->translate instanceof OpenAIConfig)) {
             throw new \RuntimeException('OpenAIEngine is not set in the config.');

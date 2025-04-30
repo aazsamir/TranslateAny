@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Api\LibreTranslate\Languages;
 
 use App\Engine\AvailableLanguage;
+use App\Engine\Languages;
 use App\Engine\TranslateEngine;
 use Tempest\Router\Get;
 use Tempest\Router\Response;
@@ -25,7 +26,7 @@ readonly class LanguagesController
         $response = array_map(
             fn (AvailableLanguage $language) => [
                 'code' => $language->language,
-                'name' => $language->language,
+                'name' => Languages::getName($language->language),
                 'targets' => $language->targets,
             ],
             $languages,

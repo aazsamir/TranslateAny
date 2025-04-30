@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Integration\Front;
+
+use Tests\Integration\TestCase;
+use Tests\IntegrationTestCase;
 
 /**
  * @internal
  */
-final class HomeControllerTest extends IntegrationTestCase
+final class FrontTest extends TestCase
 {
     public function test_index(): void
     {

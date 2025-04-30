@@ -8,12 +8,12 @@ use App\Engine\AvailableLanguage;
 use App\Engine\Languages;
 use App\Engine\TranslateEngine;
 use App\Engine\Translation;
-use OpenAI\Client;
+use OpenAI\Contracts\ClientContract;
 
 readonly class OpenAIEngine implements TranslateEngine
 {
     public function __construct(
-        private Client $client,
+        private ClientContract $client,
         private string $model,
         private ?string $systemPrompt = null,
     ) {
