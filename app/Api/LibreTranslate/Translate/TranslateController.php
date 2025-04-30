@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\Translate;
+namespace App\Api\LibreTranslate\Translate;
 
 use App\Engine\TranslateEngine;
 use Tempest\Http\Method;
@@ -20,13 +20,13 @@ readonly class TranslateController
     ) {
     }
 
-    #[Post('/translate')]
+    #[Post('/libre/translate')]
     public function __invoke(TranslateRequest $request): Response
     {
         return $this->handle($request);
     }
 
-    #[Get('/translate')]
+    #[Get('/libre/translate')]
     public function invokeGet(): Response
     {
         $q = $_GET['q'] ?? '';
@@ -53,7 +53,7 @@ readonly class TranslateController
 
         $request = new TranslateRequest(
             method: Method::GET,
-            uri: '/translate',
+            uri: '/libre/translate',
         );
         $request->q = $q;
         $request->source = $source;

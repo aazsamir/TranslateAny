@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\Detect;
+namespace App\Api\LibreTranslate\Detect;
 
 use Tempest\Router\IsRequest;
 use Tempest\Router\Request;

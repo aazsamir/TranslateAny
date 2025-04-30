@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\Languages;
+namespace App\Api\LibreTranslate\Languages;
 
 use App\Engine\AvailableLanguage;
 use App\Engine\TranslateEngine;
@@ -17,7 +17,7 @@ readonly class LanguagesController
     ) {
     }
 
-    #[Get('/languages')]
+    #[Get('/libre/languages')]
     public function __invoke(): Response
     {
         $languages = $this->engine->languages();

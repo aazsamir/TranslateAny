@@ -107,7 +107,7 @@
         translateButton.disabled = true;
         output.value = 'Translating...';
 
-        fetch('/translate', {
+        fetch('/libre/translate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
