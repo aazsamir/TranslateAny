@@ -18,9 +18,12 @@ readonly class TranslateRoute
     ) {
     }
 
+    /**
+     * @param Language[]
+     */
     public static function new(
         TranslateEngine $engine,
-        Language ...$languages,
+        ?array $languages = null,
     ): self {
         if ($languages === []) {
             $languages = null;

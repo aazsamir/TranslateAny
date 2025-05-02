@@ -44,6 +44,38 @@ return new AppConfig(
 );
 ```
 
+You may use different engines depending on target language by wrapping them in `RouteEngine`.
+```php
+<?php
+// app/Config/app.config.php
+use App\System\AppConfig;
+use App\Engine\OpenAI\OpenAIEngine;
+use App\Engine\Route\RouteEngine;
+use App\Engine\Route\TranslateRoute;
+use App\System\Language;
+
+return new AppConfig(
+    translate: RouteEngine::new(
+        TranslateRoute::new(
+            engine: OpenAIEngine::new(
+                host: 'http://localhost:11434/v1',
+                model: 'Bielik-11B-v2.3:IQ4_XS',
+            ),
+            languages: [
+                Language::pl
+            ],
+        ),
+        TranslateRoute::new(
+            engine: OpenAIEngine::new(
+                host: 'http://localhost:11434/v1',
+                model: 'qwen3:14b',
+            ),
+        ),
+    ),
+);
+
+```
+
 # License
 
 This project is licensed under the MIT License.
