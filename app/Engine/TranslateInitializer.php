@@ -22,20 +22,6 @@ readonly class TranslateInitializer implements Initializer
 
     public function initialize(Container $container): TranslateEngine
     {
-        $config = $this->appConfig->translate;
-
-        if ($config === null) {
-            return $container->get(NoopTranslateEngine::class);
-        }
-
-        if ($config instanceof OpenAIConfig) {
-            return $container->get(OpenAIEngine::class);
-        }
-
-        if ($config instanceof LibreTranslateConfig) {
-            return $container->get(LibreTranslateEngine::class);
-        }
-
-        throw new \RuntimeException('Unknown translate engine.');
+        return $this->appConfig->translate ?? new NoopTranslateEngine();
     }
 }

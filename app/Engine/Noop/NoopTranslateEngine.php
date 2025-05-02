@@ -11,6 +11,11 @@ use App\System\Language;
 
 class NoopTranslateEngine implements TranslateEngine
 {
+    public static function new(): self
+    {
+        return new self();
+    }
+
     public function translate(TranslatePayload $payload): Translation
     {
         return new Translation(

@@ -33,11 +33,11 @@ use App\System\AppConfig;
 use App\Engine\OpenAI\OpenAIConfig;
 
 return new AppConfig(
-    translate: new OpenAIConfig(
-        // ollama host, /v1 is OpenAI API compatible endpoint
+    translate: OpenAIEngine::new(
+        // ollama host, /v1 is OpenAI API compatible endpoint 
         host: 'http://localhost:11434/v1',
-        // or if you are using docker-compose
-        // host: 'http://host.docker.internal:11434/v1',
+        // or if you are using docker-compose 
+        // host: 'http://host.docker.internal:11434/v1', 
         model: 'Bielik-11B-v2.3:IQ4_XS',
         systemPrompt: 'You are an automated translation system. Translate text to the target language. Do not add any additional information or context, just the translation.',
     ),

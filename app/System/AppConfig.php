@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\System;
 
-use App\Engine\DetectionConfig;
-use App\Engine\TranslateConfig;
+use App\Engine\DetectionEngine;
+use App\Engine\TranslateEngine;
 
 readonly class AppConfig
 {
     public function __construct(
-        public ?TranslateConfig $translate = null,
-        public ?DetectionConfig $detection = null,
+        public ?TranslateEngine $translate = null,
+        public ?DetectionEngine $detection = null,
     ) {
     }
 }

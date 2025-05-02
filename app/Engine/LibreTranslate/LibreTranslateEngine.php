@@ -19,7 +19,19 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
     public function __construct(
         private string $url,
         private ClientInterface $client,
+        private ?string $apiKey = null,
     ) {
+    }
+
+    public static function new(
+        string $url = 'https://libretranslate.com',
+        ?string $apiKey = null,
+    ): self {
+        return new self(
+            url: $url,
+            client: new \GuzzleHttp\Client(),
+            apiKey: $apiKey,
+        );
     }
 
     public function detect(string $text): array

@@ -20,6 +20,22 @@ readonly class OpenAIEngine implements TranslateEngine
     ) {
     }
 
+    public static function new(
+        string $host = 'https://api.openai.com/v1',
+        string $model = 'gpt-3.5-turbo',
+        ?string $systemPrompt = null,
+        ?string $apiKey = null,
+    ): self {
+        return new self(
+            ClientFactory::make(
+                host: $host,
+                apiKey: $apiKey,
+            ),
+            model: $model,
+            systemPrompt: $systemPrompt,
+        );
+    }
+
     public function translate(TranslatePayload $payload): Translation
     {
         $messages = [];

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Engine;
 
-use App\Engine\LibreTranslate\LibreTranslateConfig;
-use App\Engine\LibreTranslate\LibreTranslateEngine;
 use App\Engine\Noop\NoopDetectionEngine;
 use App\System\AppConfig;
 use Tempest\Container\Container;
@@ -20,16 +18,6 @@ class DetectionInitializer implements Initializer
 
     public function initialize(Container $container): DetectionEngine
     {
-        $config = $this->appConfig->detection;
-
-        if ($config === null) {
-            return $container->get(NoopDetectionEngine::class);
-        }
-
-        if ($config instanceof LibreTranslateConfig) {
-            return $container->get(LibreTranslateEngine::class);
-        }
-
-        throw new \RuntimeException('Unknown detection engine.');
+        return $this->appConfig->detection ?? new NoopDetectionEngine();
     }
 }

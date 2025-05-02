@@ -16,7 +16,11 @@ use App\System\Language;
  */
 class TranslateEngineMock implements TranslateEngine
 {
-    public ?Translation $translation = null;
+    public function __construct(
+        public ?Translation $translation = null,
+    ) {
+        $this->translation = $translation;
+    }
 
     public function translate(TranslatePayload $payload): Translation
     {

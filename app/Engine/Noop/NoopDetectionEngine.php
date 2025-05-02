@@ -8,6 +8,11 @@ use App\Engine\DetectionEngine;
 
 class NoopDetectionEngine implements DetectionEngine
 {
+    public static function new(): self
+    {
+        return new self();
+    }
+
     public function detect(string $text): array
     {
         return [];
