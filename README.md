@@ -62,7 +62,7 @@ return new AppConfig(
                 model: 'Bielik-11B-v2.3:IQ4_XS',
             ),
             languages: [
-                Language::pl
+                Language::pl,
             ],
         ),
         TranslateRoute::new(
@@ -73,8 +73,38 @@ return new AppConfig(
         ),
     ),
 );
-
 ```
+
+# API
+
+TranslateAny exposes schema from different translation providers and differentates them by path prefix.
+> **_NOTE:_** Not all endpoints are exposed right now, for example: document uploading isn't handled.
+
+## Google Translate V2
+- `POST /google/v2/language/translate/v2`
+- `POST /google/v2/language/translate/v2/detect`
+- `GET /google/v2/language/translate/v2/languages`
+
+## DeepL
+- `POST /deepl/v2/translate`
+- `GET /deepl/v2/languages`
+
+## LibreTranslate
+- `POST /libre/detect`
+- `POST /libre/translate`
+- `GET /libre/languages`
+
+# TODO
+- ollama integration
+- llama.cpp integration
+- language detection system
+- api authorization
+- document translation
+- custom glosaries
+- DeepL engine
+- Google Translate Engine
+- playground for every schema
+- examples of integration with other projects, like SillyTavern
 
 # License
 
