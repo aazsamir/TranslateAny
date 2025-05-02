@@ -43,7 +43,7 @@ class LibreTranslateEngineTest extends TestCase
 
         $this->assertEquals('Hello world!', $translation->text);
         $this->assertEquals(['Hello world!'], $translation->alternatives);
-        $this->assertEquals('en', $translation->detectedLanguage->language);
+        $this->assertEquals(Language::en, $translation->detectedLanguage->language);
         $this->assertEquals(0.5, $translation->detectedLanguage->confidence);
     }
 
@@ -61,7 +61,7 @@ class LibreTranslateEngineTest extends TestCase
         $detections = $this->engine->detect('Hello world!');
 
         $this->assertCount(1, $detections);
-        $this->assertEquals('en', $detections[0]->language);
+        $this->assertEquals(Language::en, $detections[0]->language);
         $this->assertEquals(0.5, $detections[0]->confidence);
     }
 
@@ -82,7 +82,7 @@ class LibreTranslateEngineTest extends TestCase
         $languages = $this->engine->languages();
 
         $this->assertCount(1, $languages);
-        $this->assertEquals('en', $languages[0]->language);
-        $this->assertEquals(['pl'], $languages[0]->targets);
+        $this->assertEquals(Language::en, $languages[0]->language);
+        $this->assertEquals([Language::pl], $languages[0]->targets);
     }
 }

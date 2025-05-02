@@ -32,14 +32,14 @@ readonly class TranslateController
         $translations = [
             [
                 'translatedText' => $translation->text,
-                'detectedSourceLanguage' => $translation->detectedLanguage->language,
+                'detectedSourceLanguage' => $translation->detectedLanguage->language->lower(),
             ],
         ];
 
         foreach ($translation->alternatives as $alt) {
             $translations[] = [
                 'translatedText' => $alt,
-                'detectedSourceLanguage' => $translation->detectedLanguage->language,
+                'detectedSourceLanguage' => $translation->detectedLanguage->language->lower(),
             ];
         }
 

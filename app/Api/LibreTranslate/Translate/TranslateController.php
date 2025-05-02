@@ -88,7 +88,7 @@ readonly class TranslateController
         if ($translation->detectedLanguage) {
             $response['detectedLanguage'] = [
                 'confidence' => $translation->detectedLanguage->confidence,
-                'language' => $translation->detectedLanguage->language,
+                'language' => $translation->detectedLanguage->language->lower(),
             ];
         }
 

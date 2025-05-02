@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Engine;
 
+use App\System\Language;
+
 readonly class AvailableLanguage
 {
     /**
-     * @param string[] $targets
+     * @param Language[] $targets
      */
     public function __construct(
-        public string $language,
-        public array $targets,
+        public Language $language,
+        public array $targets = [],
     ) {
     }
 }

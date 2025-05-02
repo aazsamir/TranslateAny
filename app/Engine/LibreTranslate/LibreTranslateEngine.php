@@ -45,7 +45,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
 
         foreach ($response as $detection) {
             $detections[] = new Detection(
-                language: $detection['language'],
+                language: Language::fromAny($detection['language']),
                 confidence: (float) $detection['confidence'],
             );
         }
@@ -90,7 +90,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
             text: $response['translatedText'],
             alternatives: $response['alternatives'] ?? [],
             detectedLanguage: isset($response['detectedLanguage']) ? new Detection(
-                    language: $response['detectedLanguage']['language'],
+                    language: Language::fromAny($response['detectedLanguage']['language']),
                     confidence: (float) $response['detectedLanguage']['confidence'],
                 ) : null,
         );
@@ -116,8 +116,8 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
 
         foreach ($response as $language) {
             $languages[] = new AvailableLanguage(
-                language: $language['code'],
-                targets: $language['targets'],
+                language: Language::fromAny($language['code']),
+                targets: Language::fromAnyArray($language['targets']),
             );
         }
 

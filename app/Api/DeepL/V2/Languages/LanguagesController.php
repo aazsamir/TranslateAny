@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\DeepL\V2\Languages;
 
-use App\Engine\Languages;
 use App\Engine\TranslateEngine;
 use Tempest\Router\Get;
 use Tempest\Router\Response;
@@ -25,8 +24,8 @@ readonly class LanguagesController
 
         foreach ($languages as $language) {
             $response[] = [
-                'language' => strtoupper($language->language),
-                'name' => Languages::getName($language->language),
+                'language' => $language->language->upper(),
+                'name' => $language->language->value,
                 'supports_formality' => false,
             ];
         }

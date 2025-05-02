@@ -30,7 +30,7 @@ class TranslateEngineMock implements TranslateEngine
                 $payload->text,
             ],
             detectedLanguage: new Detection(
-                language: 'en',
+                language: Language::en,
                 confidence: 0.5,
             ),
         );
@@ -40,12 +40,12 @@ class TranslateEngineMock implements TranslateEngine
     {
         return [
             new AvailableLanguage(
-                language: 'en',
-                targets: ['pl'],
+                language: Language::en,
+                targets: [Language::pl],
             ),
             new AvailableLanguage(
-                language: 'pl',
-                targets: ['en'],
+                language: Language::pl,
+                targets: [Language::en],
             ),
         ];
     }

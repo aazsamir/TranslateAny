@@ -38,7 +38,7 @@ readonly class TranslateController
         foreach ($translations as $translation) {
             $response[] = [
                 'text' => $translation->text,
-                'detected_source_language' => strtoupper($translation->detectedLanguage->language),
+                'detected_source_language' => $translation->detectedLanguage->language->upper(),
                 'billed_characters' => 0,
             ];
         }

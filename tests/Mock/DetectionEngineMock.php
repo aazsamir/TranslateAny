@@ -6,6 +6,7 @@ namespace Tests\Mock;
 
 use App\Engine\Detection;
 use App\Engine\DetectionEngine;
+use App\System\Language;
 
 /**
  * @internal
@@ -18,7 +19,7 @@ class DetectionEngineMock implements DetectionEngine
     {
         $this->detections = [
             new Detection(
-                language: 'en',
+                language: Language::en,
                 confidence: 0.5,
             ),
         ];

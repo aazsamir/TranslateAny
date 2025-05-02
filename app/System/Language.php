@@ -202,6 +202,22 @@ enum Language: string
         return self::fromName(strtolower($name));
     }
 
+    /**
+     * @param string[] $names
+     *
+     * @return Language[]
+     */
+    public static function fromAnyArray(array $names): array
+    {
+        $cases = [];
+
+        foreach ($names as $name) {
+            $cases[] = self::fromAny($name);
+        }
+
+        return $cases;
+    }
+
     public function lower(): string
     {
         return \strtolower($this->name);

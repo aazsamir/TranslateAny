@@ -25,7 +25,7 @@ readonly class DetectController
         $response = array_map(
             fn (Detection $detection) => [
                 'confidence' => $detection->confidence,
-                'language' => $detection->language,
+                'language' => $detection->language->lower(),
             ],
             $detections,
         );

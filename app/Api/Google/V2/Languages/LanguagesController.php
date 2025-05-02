@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Google\V2\Languages;
 
-use App\Engine\Languages;
 use App\Engine\TranslateEngine;
 use Tempest\Router\Get;
 use Tempest\Router\Response;
@@ -25,8 +24,8 @@ readonly class LanguagesController
 
         foreach ($languages as $lan) {
             $response[] = [
-                'language' => $lan->language,
-                'name' => Languages::getName($lan->language),
+                'language' => $lan->language->lower(),
+                'name' => $lan->language->value,
             ];
         }
 

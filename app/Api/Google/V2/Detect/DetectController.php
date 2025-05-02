@@ -27,7 +27,7 @@ readonly class DetectController
 
         foreach ($detection as $det) {
             $detections[] = [
-                'language' => $det->language,
+                'language' => $det->language->lower(),
                 'isReliable' => false,
                 'confidence' => $det->confidence,
             ];
