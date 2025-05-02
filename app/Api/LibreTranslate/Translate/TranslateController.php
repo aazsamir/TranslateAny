@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Api\LibreTranslate\Translate;
 
 use App\Engine\TranslateEngine;
+use App\Engine\TranslatePayload;
+use App\System\Language;
 use Tempest\Http\Method;
 use Tempest\Http\Status;
 use Tempest\Router\GenericResponse;
@@ -66,11 +68,13 @@ readonly class TranslateController
     {
         $source = $request->source === 'auto' ? null : $request->source;
         $translation = $this->engine->translate(
-            $request->q,
-            $request->target,
-            $source,
-            $request->format,
-            $request->alternatives,
+            new TranslatePayload(
+                $request->q,
+                Language::fromAny($request->target),
+                Language::fromAny($source),
+                $request->format,
+                $request->alternatives,
+            ),
         );
 
         $response = [

@@ -13,5 +13,5 @@ class TranslateRequest implements Request
 
     public string $q;
     public string $target;
-    public ?string $source;
+    public ?string $source = null;
 }

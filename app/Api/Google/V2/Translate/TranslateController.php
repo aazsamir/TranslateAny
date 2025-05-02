@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Api\Google\V2\Translate;
 
 use App\Engine\TranslateEngine;
+use App\Engine\TranslatePayload;
+use App\System\Language;
 use Tempest\Router\Post;
 use Tempest\Router\Response;
 use Tempest\Router\Responses\Ok;
@@ -20,9 +22,11 @@ readonly class TranslateController
     public function __invoke(TranslateRequest $request): Response
     {
         $translation = $this->translate->translate(
-            text: $request->q,
-            targetLanguage: $request->target,
-            sourceLanguage: $request->source,
+            new TranslatePayload(
+                text: $request->q,
+                targetLanguage: Language::fromAny($request->target),
+                sourceLanguage: Language::fromAny($request->source),
+            ),
         );
 
         $translations = [

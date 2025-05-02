@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace App\Engine\Noop;
 
 use App\Engine\TranslateEngine;
+use App\Engine\TranslatePayload;
 use App\Engine\Translation;
+use App\System\Language;
 
 class NoopTranslateEngine implements TranslateEngine
 {
-    public function translate(
-        string $text,
-        string $targetLanguage,
-        ?string $sourceLanguage = null,
-        ?string $format = null,
-        ?int $alternatives = null,
-    ): Translation {
+    public function translate(TranslatePayload $payload): Translation
+    {
         return new Translation(
-            text: $text,
+            text: $payload->text,
         );
     }
 

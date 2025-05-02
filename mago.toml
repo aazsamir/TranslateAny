@@ -34,6 +34,10 @@ name = "maintainability/too-many-enum-cases"
 level = "off"
 
 [[linter.rules]]
+name = "maintainability/too-many-properties"
+level = "off"
+
+[[linter.rules]]
 name = "maintainability/excessive-parameter-list"
 level = "off"
 

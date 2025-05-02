@@ -14,7 +14,8 @@ readonly class LanguagesController
 {
     public function __construct(
         private TranslateEngine $translate,
-    ) {}
+    ) {
+    }
 
     #[Get('/deepl/v2/languages')]
     public function __invoke(): Response

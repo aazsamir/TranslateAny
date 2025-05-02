@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\Engine\LibreTranslate;
 
 use App\Engine\LibreTranslate\LibreTranslateEngine;
+use App\System\Language;
 use Tests\Mock\PsrClientMock;
 use Tests\TestCase;
+use Tests\Unit\Utils\PayloadFixture;
 
 class LibreTranslateEngineTest extends TestCase
 {
@@ -37,11 +39,7 @@ class LibreTranslateEngineTest extends TestCase
             ],
         );
 
-        $translation = $this->engine->translate(
-            text: 'Hello world!',
-            targetLanguage: 'en',
-            sourceLanguage: 'es',
-        );
+        $translation = $this->engine->translate(PayloadFixture::get());
 
         $this->assertEquals('Hello world!', $translation->text);
         $this->assertEquals(['Hello world!'], $translation->alternatives);

@@ -74,7 +74,7 @@ class Languages
         'hu' => 'Hungarian',
         'hy' => 'Armenian',
         'hz' => 'Herero',
-        'ia' => 'Interlingua (International Auxiliary Language Association)',
+        'ia' => 'Interlingua',
         'id' => 'Indonesian',
         'ie' => 'Interlingue',
         'ig' => 'Igbo',

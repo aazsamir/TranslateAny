@@ -12,7 +12,6 @@ class TranslateControllerTest extends TestCase
     {
         $response = $this->http->post('/google/v2/language/translate/v2', [
             'q' => 'Hello world!',
-            'source' => 'auto',
             'target' => 'pl',
         ]);
 

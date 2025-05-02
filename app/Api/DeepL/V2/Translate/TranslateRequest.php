@@ -65,5 +65,4 @@ class TranslateRequest implements Request
     public ?array $splitting_tags = null;
     /** @var string[] */
     public ?array $ignore_tags = null;
-
 }

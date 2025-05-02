@@ -8,7 +8,9 @@ use App\Engine\AvailableLanguage;
 use App\Engine\Detection;
 use App\Engine\DetectionEngine;
 use App\Engine\TranslateEngine;
+use App\Engine\TranslatePayload;
 use App\Engine\Translation;
+use App\System\Language;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
 
@@ -51,22 +53,22 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
         return $detections;
     }
 
-    public function translate(string $text, string $targetLanguage, ?string $sourceLanguage = null, ?string $format = null, ?int $alternatives = null): Translation
+    public function translate(TranslatePayload $payload): Translation
     {
         $request = [
-            'q' => $text,
-            'target' => $targetLanguage,
+            'q' => $payload->text,
+            'target' => $payload->targetLanguage->lower(),
         ];
-        if ($sourceLanguage) {
-            $request['source'] = $sourceLanguage;
+        if ($payload->sourceLanguage) {
+            $request['source'] = $payload->sourceLanguage->lower();
         } else {
             $request['source'] = 'auto';
         }
-        if ($format) {
-            $request['format'] = $format;
+        if ($payload->format) {
+            $request['format'] = $payload->format;
         }
-        if ($alternatives) {
-            $request['alternatives'] = $alternatives;
+        if ($payload->alternatives) {
+            $request['alternatives'] = $payload->alternatives;
         }
 
         $request = new Request(

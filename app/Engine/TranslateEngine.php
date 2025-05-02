@@ -6,13 +6,7 @@ namespace App\Engine;
 
 interface TranslateEngine
 {
-    public function translate(
-        string $text,
-        string $targetLanguage,
-        ?string $sourceLanguage = null,
-        ?string $format = null,
-        ?int $alternatives = null,
-    ): Translation;
+    public function translate(TranslatePayload $payload): Translation;
 
     /**
      * @return AvailableLanguage[]

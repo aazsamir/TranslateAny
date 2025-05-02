@@ -7,7 +7,9 @@ namespace App\Engine\OpenAI;
 use App\Engine\AvailableLanguage;
 use App\Engine\Languages;
 use App\Engine\TranslateEngine;
+use App\Engine\TranslatePayload;
 use App\Engine\Translation;
+use App\System\Language;
 use OpenAI\Contracts\ClientContract;
 
 readonly class OpenAIEngine implements TranslateEngine
@@ -19,13 +21,8 @@ readonly class OpenAIEngine implements TranslateEngine
     ) {
     }
 
-    public function translate(
-        string $text,
-        string $targetLanguage,
-        ?string $sourceLanguage = null,
-        ?string $format = null,
-        ?int $alternatives = null,
-    ): Translation {
+    public function translate(TranslatePayload $payload): Translation
+    {
         $messages = [];
 
         if ($this->systemPrompt) {
@@ -35,12 +32,9 @@ readonly class OpenAIEngine implements TranslateEngine
             ];
         }
 
-        $targetLanguage = \strtolower($targetLanguage);
-        $targetLanguage = Languages::getName($targetLanguage);
-
         $messages[] = [
             'role' => 'user',
-            'content' => 'translate to ' . $targetLanguage . ':\n' . $text,
+            'content' => 'translate to ' . $payload->targetLanguage->name . ':\n' . $payload->text,
         ];
         $response = $this->client->chat()->create([
                 'model' => $this->model,
