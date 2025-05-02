@@ -1,6 +1,6 @@
 # TranslateAny
 
-TranslateAny is a project that turns any OpenAI compatible system into translate engine, exposing [LibreTranslate](https://github.com/LibreTranslate/LibreTranslate) compatible API.
+TranslateAny is a project that turns any OpenAI compatible system into translate engine, exposing API compatible with Google Translate, DeepL and LibreTranslate.
 
 # Usage
 
