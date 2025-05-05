@@ -9,14 +9,16 @@ TranslateAny is a project that turns any OpenAI compatible system into translate
 ```
 git clone https://github.com/aazsamir/translateany.git
 cd translateany
+cp .env.example .env
 docker compose up
 ```
 or
 ```
 git clone https://github.com/aazsamir/translateany.git
 cd translateany
+cp .env.example .env
 composer install
-./tempest serve
+./tempest serve --host=0.0.0.0 --port=8000
 ```
 
 Now, on `http://localhost:8000`, you can test your configuration on translation page and use API.
@@ -75,6 +77,25 @@ return new AppConfig(
 );
 ```
 
+Depending on your needs, you may want to cache the translation results. You can do this by using `CacheEngine`
+```php
+<?php
+// app/Config/app.config.php
+use App\Engine\Cache\CacheEngine;
+use App\Engine\OpenAI\OpenAIEngine;
+use App\System\AppConfig;
+
+return new AppConfig(
+    translate: CacheEngine::new(
+        engine: OpenAIEngine::new(
+            model: 'Bielik-11B-v2.3:IQ4_XS',
+            host: 'http://localhost:11434/v1',
+        ),
+        cacheMinutes: 5,
+    ),
+);
+```
+
 # API
 
 TranslateAny exposes schema from different translation providers and differentates them by path prefix.
@@ -88,23 +109,35 @@ TranslateAny exposes schema from different translation providers and differentat
 ## DeepL
 - `POST /deepl/v2/translate`
 - `GET /deepl/v2/languages`
+- `POST /deepl/v2/glossary-language-pairs`
+- `POST /deepl/v2/glossaries`
+- `GET /deepl/v2/glossaries`
+- `GET /deepl/v2/glossaries/{glossary_id}`
+- `GET /deepl/v2/glossaries/{glossary_id}/entries`
+- `DELETE /deepl/v2/glossaries/{glossary_id}`
 
 ## LibreTranslate
 - `POST /libre/detect`
 - `POST /libre/translate`
 - `GET /libre/languages`
 
-# TODO
-- ollama integration
-- llama.cpp integration
-- language detection system
-- api authorization
-- document translation
-- custom glosaries
-- DeepL engine
-- Google Translate Engine
-- playground for every schema
-- examples of integration with other projects, like SillyTavern
+# Features
+- [x] OpenAI Compatible API Engine
+- [x] LibreTranslate Engine
+- [] Native Ollama Engine
+- [] Native Llama.cpp Engine
+- [] Native vLLM Engine
+- [] Google Translate Engine
+- [] DeepL Engine
+- [x] Deepl API
+- [x] Google Translate v2 API
+- [] Google Translate v3 API
+- [x] LibreTranslate API
+- [] Language Detection
+- [] API authorization
+- [] Document Translation
+- [] HTML Playground to test integration
+- [] Examples of integration with other projects, like SillyTavern
 
 # License
 
