@@ -21,7 +21,7 @@ composer install
 ./tempest serve --host=0.0.0.0 --port=8000
 ```
 
-Now, on `http://localhost:8000`, you can test your configuration on translation page and use API.
+Now, on `http://localhost:8000` you can test your configuration in playground.
 
 ![View](./docs/page.png)
 
