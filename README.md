@@ -122,22 +122,26 @@ TranslateAny exposes schema from different translation providers and differentat
 - `GET /libre/languages`
 
 # Features
-- [x] OpenAI Compatible API Engine
-- [x] LibreTranslate Engine
-- [] Native Ollama Engine
-- [] Native Llama.cpp Engine
-- [] Native vLLM Engine
-- [] Google Translate Engine
-- [] DeepL Engine
-- [x] Deepl API
-- [x] Google Translate v2 API
-- [] Google Translate v3 API
-- [x] LibreTranslate API
-- [] Language Detection
-- [] API authorization
-- [] Document Translation
-- [] HTML Playground to test integration
-- [] Examples of integration with other projects, like SillyTavern
+- ✅ OpenAI Compatible API Translation Engine
+- ✅ LibreTranslate Translation Engine
+- ❌ Native Ollama Translation Engine
+- ❌ Native Llama.cpp Translation Engine
+- ❌ Native vLLM Translation Engine
+- ❌ Google Translate Translation Engine
+- ❌ DeepL Translation Engine
+- ✅ Deepl API
+    > **_NOTE:_** Currently missing `/v2/write/rephrase` endpoint
+- ✅ Google Translate v2 API
+    > **_NOTE:_** Currently missing `/language/translate/v2/detect` endpoint
+- ❌ Google Translate v3 API
+- ✅ LibreTranslate API
+- ❌ Language Detection
+- ❌ Rephrasing
+- ❌ API authorization
+- ❌ Document Translation
+- ⚠️ HTML Playground to test integration
+    > **_NOTE:_** This is a work in progress, and not all features are possible to test. Basic translation is available.
+- ❌ Examples of integration with other projects, like SillyTavern
 
 # License
 
