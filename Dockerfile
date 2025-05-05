@@ -1,5 +1,6 @@
 FROM php:8.4.6-apache
-RUN apt-get update && apt-get install -y git zip unzip
+RUN apt-get update && apt-get install -y git zip unzip libicu-dev
+RUN docker-php-ext-install intl
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN a2enmod headers rewrite

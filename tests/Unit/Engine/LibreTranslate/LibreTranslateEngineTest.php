@@ -20,7 +20,7 @@ class LibreTranslateEngineTest extends TestCase
     {
         $this->psrClient = new PsrClientMock();
         $this->engine = new LibreTranslateEngine(
-            url: '',
+            host: '',
             client: $this->psrClient,
             logger: new NullLogger(),
         );

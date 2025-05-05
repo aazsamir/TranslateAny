@@ -24,7 +24,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
     use PrefixLogger;
 
     public function __construct(
-        private string $url,
+        private string $host,
         private ClientInterface $client,
         private Logger $logger,
         // @phpstan-ignore-next-line
@@ -33,13 +33,13 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
     }
 
     public static function new(
-        string $url = 'https://libretranslate.com',
+        string $host = 'https://libretranslate.com',
         ?string $apiKey = null,
     ): self {
         $lazy = new ReflectionClass(self::class);
-        $lazy = $lazy->newLazyGhost(function (LibreTranslateEngine $object) use ($url, $apiKey) {
+        $lazy = $lazy->newLazyGhost(function (LibreTranslateEngine $object) use ($host, $apiKey) {
             $object->__construct(
-                url: $url,
+                host: $host,
                 client: new \GuzzleHttp\Client(),
                 apiKey: $apiKey,
                 logger: get(Logger::class),
@@ -53,7 +53,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
     {
         $request = new Request(
             method: 'POST',
-            uri: $this->url . '/detect',
+            uri: $this->host . '/detect',
             headers: [
                 'Content-Type' => 'application/json',
             ],
@@ -118,7 +118,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
 
         $request = new Request(
             method: 'POST',
-            uri: $this->url . '/translate',
+            uri: $this->host . '/translate',
             headers: [
                 'Content-Type' => 'application/json',
             ],
@@ -164,7 +164,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
     {
         $request = new Request(
             method: 'GET',
-            uri: $this->url . '/languages',
+            uri: $this->host . '/languages',
             headers: [
                 'Content-Type' => 'application/json',
             ],

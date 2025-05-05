@@ -27,6 +27,21 @@ Now, on `http://localhost:8000`, you can test your configuration on translation 
 
 # Configuration
 
+## Configuration builder wizard
+
+If you aren't familiar with PHP try configuration builder wizard.
+
+```shell
+php tempest create-config
+```
+
+If you don't have `php` installed, use `docker compose` to run wizard.
+```shell
+docker compose run --rm config-builder
+```
+
+## Manual configuration
+
 Copy `app/Config/app.config.php.example` to `app/Config/app.config.php`.
 ```php
 <?php
