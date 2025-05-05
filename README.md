@@ -131,6 +131,10 @@ TranslateAny exposes schema from different translation providers and differentat
 - `GET /deepl/v2/glossaries/{glossary_id}/entries`
 - `DELETE /deepl/v2/glossaries/{glossary_id}`
 
+## DeepLX
+- `POST /deeplx/translate`
+- `POST /deeplx/v1/translate`
+
 ## LibreTranslate
 - `POST /libre/detect`
 - `POST /libre/translate`
@@ -144,8 +148,9 @@ TranslateAny exposes schema from different translation providers and differentat
 - ❌ Native vLLM Translation Engine
 - ❌ Google Translate Translation Engine
 - ❌ DeepL Translation Engine
-- ✅ Deepl API
+- ✅ DeepL API
     > **_NOTE:_** Currently missing `/v2/write/rephrase` endpoint
+- ✅ DeepLX API
 - ✅ Google Translate v2 API
 - ❌ Google Translate v3 API
 - ✅ LibreTranslate API
