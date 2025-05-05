@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Engine\LibreTranslate;
 
 use App\Engine\AvailableLanguage;
+use App\Engine\DetectEngine;
 use App\Engine\Detection;
-use App\Engine\DetectionEngine;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
@@ -19,7 +19,7 @@ use Tempest\Log\Logger;
 
 use function Tempest\get;
 
-readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
+readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
 {
     use PrefixLogger;
 

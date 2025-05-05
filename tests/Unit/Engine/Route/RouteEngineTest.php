@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Engine\Route;
 
-use App\Engine\Noop\NoopDetectionEngine;
+use App\Engine\Noop\NoopDetectEngine;
 use App\Engine\Noop\NoopTranslateEngine;
 use App\Engine\Route\RouteEngine;
 use App\Engine\Route\TranslateRoute;

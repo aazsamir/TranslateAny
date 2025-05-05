@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Engine\Noop;
 
-use App\Engine\DetectionEngine;
+use App\Engine\DetectEngine;
 
-class NoopDetectionEngine implements DetectionEngine
+class NoopDetectEngine implements DetectEngine
 {
     public static function new(): self
     {

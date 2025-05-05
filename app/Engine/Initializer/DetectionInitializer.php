@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Engine\Initializer;
 
-use App\Engine\DetectionEngine;
-use App\Engine\Noop\NoopDetectionEngine;
+use App\Engine\DetectEngine;
+use App\Engine\Noop\NoopDetectEngine;
 use App\System\AppConfig;
 use Tempest\Container\Container;
 use Tempest\Container\Initializer;
@@ -17,8 +17,8 @@ class DetectionInitializer implements Initializer
     ) {
     }
 
-    public function initialize(Container $container): DetectionEngine
+    public function initialize(Container $container): DetectEngine
     {
-        return $this->appConfig->detection ?? new NoopDetectionEngine();
+        return $this->appConfig->detection ?? new NoopDetectEngine();
     }
 }

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Mock;
 
+use App\Engine\DetectEngine;
 use App\Engine\Detection;
-use App\Engine\DetectionEngine;
 use App\System\Language;
 
 /**
  * @internal
  */
-class DetectionEngineMock implements DetectionEngine
+class DetectionEngineMock implements DetectEngine
 {
     public array $detections = [];
 

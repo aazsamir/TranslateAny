@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Engine\Noop;
 
-use App\Engine\Noop\NoopDetectionEngine;
+use App\Engine\Noop\NoopDetectEngine;
 use Tests\TestCase;
 
-class NoopDetectionEngineTest extends TestCase
+class NoopDetectEngineTest extends TestCase
 {
-    private NoopDetectionEngine $engine;
+    private NoopDetectEngine $engine;
 
     protected function setUp(): void
     {
-        $this->engine = NoopDetectionEngine::new();
+        $this->engine = NoopDetectEngine::new();
     }
 
     public function test(): void

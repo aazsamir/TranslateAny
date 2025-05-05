@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
-use App\Engine\DetectionEngine;
+use App\Engine\DetectEngine;
 use App\Engine\DocumentTranslateEngine;
 use App\Engine\TranslateEngine;
 use App\System\Glossary\GlossaryRepository;
@@ -24,7 +24,7 @@ abstract class TestCase extends IntegrationTest
     {
         parent::setUp();
 
-        $this->container->register(DetectionEngine::class, function () {
+        $this->container->register(DetectEngine::class, function () {
             return new DetectionEngineMock();
         });
         $this->container->register(TranslateEngine::class, function () {

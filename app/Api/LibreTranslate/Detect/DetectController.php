@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Api\LibreTranslate\Detect;
 
+use App\Engine\DetectEngine;
 use App\Engine\Detection;
-use App\Engine\DetectionEngine;
 use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
 use Tempest\Http\Responses\Ok;
@@ -14,7 +14,7 @@ use Tempest\Router\Post;
 readonly class DetectController
 {
     public function __construct(
-        private DetectionEngine $detectionEngine,
+        private DetectEngine $detectionEngine,
     ) {
     }
 

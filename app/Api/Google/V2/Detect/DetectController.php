@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Google\V2\Detect;
 
-use App\Engine\DetectionEngine;
+use App\Engine\DetectEngine;
 use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
 use Tempest\Http\Responses\Ok;
@@ -13,7 +13,7 @@ use Tempest\Router\Post;
 readonly class DetectController
 {
     public function __construct(
-        private DetectionEngine $detection,
+        private DetectEngine $detection,
     ) {
     }
 
