@@ -102,7 +102,7 @@ readonly class OpenAIEngine implements TranslateEngine
 
         $messages[] = [
             'role' => 'user',
-            'content' => 'translate to ' . $payload->targetLanguage->name . ' language:\n' . $payload->text,
+            'content' => 'translate to ' . $payload->targetLanguage->value . ' language:\n' . $payload->text,
         ];
 
         $this->logger->debug(
