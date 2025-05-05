@@ -233,4 +233,9 @@ enum Language: string
     {
         return \strtoupper($this->name);
     }
+
+    public function titleLower(): string
+    {
+        return \strtolower($this->value);
+    }
 }

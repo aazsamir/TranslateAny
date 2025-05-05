@@ -26,21 +26,13 @@ readonly class TranslateController
             LogMiddleware::class,
         ],
     )]
-    public function __invoke(TranslateRequest $request): Response
-    {
-        return $this->handle($request);
-    }
-
-    /**
-     * GET for easy testing, it is not defined in the API spec.
-     */
     #[Get(
         uri: '/libre/translate',
         middleware: [
             LogMiddleware::class,
         ],
     )]
-    public function invokeGet(TranslateRequest $request): Response
+    public function __invoke(TranslateRequest $request): Response
     {
         return $this->handle($request);
     }

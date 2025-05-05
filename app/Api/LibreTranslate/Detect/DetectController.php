@@ -9,6 +9,7 @@ use App\Engine\Detection;
 use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
 use Tempest\Http\Responses\Ok;
+use Tempest\Router\Get;
 use Tempest\Router\Post;
 
 readonly class DetectController
@@ -19,6 +20,12 @@ readonly class DetectController
     }
 
     #[Post(
+        uri: '/libre/detect',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
+    #[Get(
         uri: '/libre/detect',
         middleware: [
             LogMiddleware::class,

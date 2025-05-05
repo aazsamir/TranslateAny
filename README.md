@@ -96,10 +96,25 @@ return new AppConfig(
 );
 ```
 
+To access language detection, configure `detection` in `app/Config/app.config.php`:
+```php
+<?php
+// app/Config/app.config.php
+use App\Engine\OpenAI\OpenAIDetectEngine;
+use App\System\AppConfig;
+
+return new AppConfig(
+    detection: OpenAIDetectEngine::new(
+        host: 'http://localhost:11434/v1',
+        model: 'hf.co/unsloth/Qwen3-1.7B-GGUF:IQ4_XS',
+    ),
+);
+```
+
 # API
 
 TranslateAny exposes schema from different translation providers and differentates them by path prefix.
-> **_NOTE:_** Not all endpoints are exposed right now, for example: document uploading isn't handled.
+> **_NOTE:_** Not all endpoints are exposed right now, for example: document translation isn't handled.
 
 ## Google Translate V2
 - `POST /google/v2/language/translate/v2`
@@ -132,10 +147,9 @@ TranslateAny exposes schema from different translation providers and differentat
 - ✅ Deepl API
     > **_NOTE:_** Currently missing `/v2/write/rephrase` endpoint
 - ✅ Google Translate v2 API
-    > **_NOTE:_** Currently missing `/language/translate/v2/detect` endpoint
 - ❌ Google Translate v3 API
 - ✅ LibreTranslate API
-- ❌ Language Detection
+- ✅ Language Detection
 - ❌ Rephrasing
 - ❌ API authorization
 - ❌ Document Translation

@@ -8,6 +8,7 @@ use App\Engine\AvailableLanguage;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
+use App\System\Chat\TextTrimmer;
 use App\System\Glossary\GlossaryRepository;
 use App\System\Language;
 use App\System\Logger\PrefixLogger;
@@ -155,21 +156,8 @@ readonly class OpenAIEngine implements TranslateEngine
         );
 
         return new Translation(
-            text: $this->formatText($choice),
+            text: TextTrimmer::trim($choice),
         );
-    }
-
-    private function formatText(?string $text): string
-    {
-        if ($text === null) {
-            return '';
-        }
-
-        $text = preg_replace('/<think>.*?<\/think>/s', '', $text) ?? '';
-        $text = preg_replace('/<thinking>.*?<\/thinking>/s', '', $text) ?? '';
-        $text = trim($text);
-
-        return $text;
     }
 
     public function languages(): array
