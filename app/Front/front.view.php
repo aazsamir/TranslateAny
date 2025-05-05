@@ -9,11 +9,15 @@
         <div class="col d-flex justify-content-around">
             <select id="source" class="form-select form-select-lg w-25" aria-label="Source Language">
                 <option value="auto">auto</option>
+                <x-template :foreach="App\System\Language::alphabetically() as $language">
+                    <option value="{{ $language->lower() }}">{{ $language->value }}</option>
+                </x-template>
             </select>
             <button id="translate" class="btn btn-primary btn-lg w-100">Translate</button>
             <select id="target" class="form-select form-select-lg w-25" aria-label="Target Language">
-                <option value="en">English</option>
-                <option value="pl">Polish</option>
+                <x-template :foreach="App\System\Language::alphabetically() as $language">
+                    <option value="{{ $language->lower() }}">{{ $language->value }}</option>
+                </x-template>
             </select>
         </div>
     </div>
@@ -71,6 +75,7 @@
                     })
                     .finally(() => {
                         translateButton.disabled = false;
+                        saveText();
                     });
             }
 
@@ -98,6 +103,19 @@
 
                 localStorage.setItem('inputText', inputText);
                 localStorage.setItem('outputText', outputText);
+            }
+
+            function loadText() {
+                const savedInputText = localStorage.getItem('inputText');
+                const savedOutputText = localStorage.getItem('outputText');
+
+                if (savedInputText) {
+                    input.value = savedInputText;
+                }
+
+                if (savedOutputText) {
+                    output.value = savedOutputText;
+                }
             }
 
             function saveLanguages() {

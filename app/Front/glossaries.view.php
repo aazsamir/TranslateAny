@@ -5,14 +5,14 @@
                 <label>Comma separated values</label>
                 <textarea class="w-100" name="entries"></textarea>
                 <select class="form-select" name="source_lang" required>
-                    <option value="">Select Source Language</option>
-                    <option value="EN" selected>English</option>
-                    <option value="PL">Polish</option>
+                    <x-template :foreach="App\System\Language::alphabetically() as $language">
+                        <option value="{{ $language->upper() }}">{{ $language->value }}</option>
+                    </x-template>
                 </select>
                 <select class="form-select" name="target_lang" required>
-                    <option value="">Select Source Language</option>
-                    <option value="EN">English</option>
-                    <option value="PL" selected>Polish</option>
+                    <x-template :foreach="App\System\Language::alphabetically() as $language">
+                        <option value="{{ $language->upper() }}">{{ $language->value }}</option>
+                    </x-template>
                 </select>
                 <input type="text" class="form-control" name="name" placeholder="Glossary Name" required>
                 <input type="hidden" name="entries_format" value="csv">
@@ -23,50 +23,50 @@
             <div id="glossariesContainer"></div>
         </div>
     </div>
-<x-slot name="scripts">
-    <script>
-        const glossariesContainer = document.querySelector('#glossariesContainer');
-        const glossaryForm = document.querySelector('#glossaryForm');
-        var glossaries = [];
+    <x-slot name="scripts">
+        <script>
+            const glossariesContainer = document.querySelector('#glossariesContainer');
+            const glossaryForm = document.querySelector('#glossaryForm');
+            var glossaries = [];
 
-        fetchGlossaries();
+            fetchGlossaries();
 
-        glossaryForm.addEventListener('submit', saveForm);
+            glossaryForm.addEventListener('submit', saveForm);
 
-        function saveForm(event) {
-            event.preventDefault();
-            const formData = new FormData(glossaryForm);
-            fetch('/deepl/v2/glossaries', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (response.ok) {
-                        fetchGlossaries();
-                    } else {
-                        console.error('Error saving glossary:', response.statusText);
-                    }
-                })
-                .catch(error => console.error('Error saving glossary:', error));
-        }
+            function saveForm(event) {
+                event.preventDefault();
+                const formData = new FormData(glossaryForm);
+                fetch('/deepl/v2/glossaries', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            fetchGlossaries();
+                        } else {
+                            console.error('Error saving glossary:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error saving glossary:', error));
+            }
 
-        function fetchGlossaries() {
-            fetch('/deepl/v2/glossaries')
-                .then(response => response.json())
-                .then(data => {
-                    glossaries = data.glossaries;
-                    renderGlossaries();
-                })
-                .catch(error => console.error('Error fetching glossaries:', error));
-        }
+            function fetchGlossaries() {
+                fetch('/deepl/v2/glossaries')
+                    .then(response => response.json())
+                    .then(data => {
+                        glossaries = data.glossaries;
+                        renderGlossaries();
+                    })
+                    .catch(error => console.error('Error fetching glossaries:', error));
+            }
 
-        function renderGlossaries() {
-            glossariesContainer.innerHTML = '';
+            function renderGlossaries() {
+                glossariesContainer.innerHTML = '';
 
-            glossaries.forEach(glossary => {
-                const glossaryDiv = document.createElement('div');
-                glossaryDiv.className = 'glossary-item card';
-                glossaryDiv.innerHTML = `
+                glossaries.forEach(glossary => {
+                    const glossaryDiv = document.createElement('div');
+                    glossaryDiv.className = 'glossary-item card';
+                    glossaryDiv.innerHTML = `
                     <h5>${glossary.name}</h5>
                     <p>Source Language: ${glossary.source_lang}</p>
                     <p>Target Language: ${glossary.target_lang}</p>
@@ -74,41 +74,41 @@
                     <button class="btn btn-primary" onclick="downloadGlossary('${glossary.glossary_id}')">Download</button>
                     <button class="btn btn-danger" onclick="deleteGlossary('${glossary.glossary_id}')">Delete</button>
                 `;
-                glossariesContainer.appendChild(glossaryDiv);
-            });
-        }
+                    glossariesContainer.appendChild(glossaryDiv);
+                });
+            }
 
-        function deleteGlossary(glossaryId) {
-            fetch(`/deepl/v2/glossaries/${glossaryId}`, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        fetchGlossaries();
-                    } else {
-                        console.error('Error deleting glossary:', response.statusText);
-                    }
-                })
-                .catch(error => console.error('Error deleting glossary:', error));
-        }
+            function deleteGlossary(glossaryId) {
+                fetch(`/deepl/v2/glossaries/${glossaryId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            fetchGlossaries();
+                        } else {
+                            console.error('Error deleting glossary:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error deleting glossary:', error));
+            }
 
-        function downloadGlossary(glossaryId) {
-            fetch(`/deepl/v2/glossaries/${glossaryId}/entries`, {
-                method: 'GET'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    } else {
-                        throw new Error('Error downloading glossary:', response.statusText);
-                    }
-                })
-                .then(data => {
-                    const textarea = document.querySelector('textarea[name="entries"]');
-                    textarea.value = data.replace(/\t/g, ',');
-                })
-                .catch(error => console.error('Error downloading glossary:', error));
-        }
-    </script>
-</x-slot>
+            function downloadGlossary(glossaryId) {
+                fetch(`/deepl/v2/glossaries/${glossaryId}/entries`, {
+                        method: 'GET'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            throw new Error('Error downloading glossary:', response.statusText);
+                        }
+                    })
+                    .then(data => {
+                        const textarea = document.querySelector('textarea[name="entries"]');
+                        textarea.value = data.replace(/\t/g, ',');
+                    })
+                    .catch(error => console.error('Error downloading glossary:', error));
+            }
+        </script>
+    </x-slot>
 </x-base>

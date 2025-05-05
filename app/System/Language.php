@@ -238,4 +238,18 @@ enum Language: string
     {
         return \strtolower($this->value);
     }
+
+    /**
+     * @return Language[]
+     */
+    public static function alphabetically(): array
+    {
+        $languages = self::cases();
+
+        usort($languages, function (self $a, self $b) {
+            return strcasecmp($a->value, $b->value);
+        });
+
+        return $languages;
+    }
 }
