@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Api\DeepL\V2\GlossaryLanguagePairs;
 
 use App\Engine\TranslateEngine;
+use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
 use Tempest\Http\Responses\Ok;
 use Tempest\Router\Get;
@@ -16,7 +17,12 @@ readonly class GlossaryLanguagePairsController
     ) {
     }
 
-    #[Get('/deepl/v2/glossary-language-pairs')]
+    #[Get(
+        uri: '/deepl/v2/glossary-language-pairs',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(): Response
     {
         $languages = $this->translateEngine->languages();

@@ -8,6 +8,7 @@ use App\Engine\OpenAI\OpenAIEngine;
 use App\System\Language;
 use OpenAI\Responses\Chat\CreateResponse;
 use OpenAI\Testing\ClientFake;
+use Tests\Mock\GlossaryRepositoryMock;
 use Tests\Mock\NullLogger;
 use Tests\TestCase;
 use Tests\Unit\Utils\TranslatePayloadFixture;
@@ -25,6 +26,7 @@ class OpenAIEngineTest extends TestCase
             model: 'test:1.b',
             systemPrompt: 'test',
             logger: new NullLogger(),
+            glossaryRepository: new GlossaryRepositoryMock(),
         );
     }
 

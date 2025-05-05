@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\DeepL\V2\Glossaries;
 
+use App\Middleware\LogMiddleware;
 use App\System\Glossary\Glossary;
 use App\System\Glossary\GlossaryRepository;
 use App\System\Language;
@@ -26,7 +27,12 @@ readonly class GlossariesController
     ) {
     }
 
-    #[Post('/deepl/v2/glossaries')]
+    #[Post(
+        uri: '/deepl/v2/glossaries',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function post(GlossariesRequest $request): Response
     {
         $entries = $this->glossaryService->toArray(
@@ -55,7 +61,12 @@ readonly class GlossariesController
         return new Created($response);
     }
 
-    #[Get('/deepl/v2/glossaries')]
+    #[Get(
+        uri: '/deepl/v2/glossaries',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function get(): Response
     {
         $glossaries = $this->glossaryRepository->all();
@@ -80,7 +91,12 @@ readonly class GlossariesController
         return new Ok($response);
     }
 
-    #[Get('/deepl/v2/glossaries/{id}')]
+    #[Get(
+        uri: '/deepl/v2/glossaries/{id}',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function getById(string $id): Response
     {
         $glossary = $this->glossaryRepository->get($id);
@@ -98,7 +114,12 @@ readonly class GlossariesController
         return new Ok($response);
     }
 
-    #[Delete('/deepl/v2/glossaries/{id}')]
+    #[Delete(
+        uri: '/deepl/v2/glossaries/{id}',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function delete(string $id): Response
     {
         $this->glossaryRepository->remove($id);
@@ -108,7 +129,12 @@ readonly class GlossariesController
         );
     }
 
-    #[Get('/deepl/v2/glossaries/{id}/entries')]
+    #[Get(
+        uri: '/deepl/v2/glossaries/{id}/entries',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function entires(string $id): Response
     {
         $glossary = $this->glossaryRepository->get($id);

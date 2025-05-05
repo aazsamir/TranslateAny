@@ -35,6 +35,7 @@ readonly class TranslateController
                     text: $text,
                     targetLanguage: Language::fromAny($request->target_lang),
                     sourceLanguage: Language::tryFromAny($request->source_lang),
+                    glossaryId: $request->glossary_id,
                 ),
             );
         }

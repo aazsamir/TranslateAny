@@ -8,6 +8,7 @@ use App\Engine\AvailableLanguage;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
+use App\System\Glossary\GlossaryRepository;
 use App\System\Language;
 use App\System\Logger\PrefixLogger;
 use OpenAI\Contracts\ClientContract;
@@ -22,9 +23,11 @@ readonly class OpenAIEngine implements TranslateEngine
 
     public function __construct(
         private ClientContract $client,
-        private string $model,
         private Logger $logger,
+        private GlossaryRepository $glossaryRepository,
+        private string $model,
         private ?string $systemPrompt = null,
+        private ?string $glossaryPrompt = null,
         private ?float $temperature = null,
         private ?float $topP = null,
         private ?float $frequencyPenalty = null,
@@ -34,7 +37,8 @@ readonly class OpenAIEngine implements TranslateEngine
     public static function new(
         string $host = 'https://api.openai.com/v1',
         string $model = 'gpt-3.5-turbo',
-        ?string $systemPrompt = null,
+        ?string $systemPrompt = 'You are an automated translation system. Translate text to the target language. Do not add any additional information or context, just the translation.',
+        ?string $glossaryPrompt = 'User provided glossary, use words from it if possible:',
         ?string $apiKey = null,
         ?float $temperature = null,
         ?float $topP = null,
@@ -42,7 +46,7 @@ readonly class OpenAIEngine implements TranslateEngine
     ): self {
         $lazy = new ReflectionClass(self::class);
         $lazy = $lazy->newLazyGhost(
-            function (OpenAIEngine $object) use ($host, $model, $systemPrompt, $apiKey, $temperature, $topP, $frequencyPenalty) {
+            function (OpenAIEngine $object) use ($host, $model, $systemPrompt, $glossaryPrompt, $apiKey, $temperature, $topP, $frequencyPenalty) {
                 $object->__construct(
                     client: ClientFactory::make(
                         host: $host,
@@ -50,10 +54,12 @@ readonly class OpenAIEngine implements TranslateEngine
                     ),
                     model: $model,
                     systemPrompt: $systemPrompt,
+                    glossaryPrompt: $glossaryPrompt,
                     temperature: $temperature,
                     topP: $topP,
                     frequencyPenalty: $frequencyPenalty,
                     logger: get(Logger::class),
+                    glossaryRepository: get(GlossaryRepository::class),
                 );
             },
         );
@@ -64,17 +70,38 @@ readonly class OpenAIEngine implements TranslateEngine
     public function translate(TranslatePayload $payload): Translation
     {
         $messages = [];
+        $systemPrompt = $this->systemPrompt;
 
-        if ($this->systemPrompt) {
+        if ($payload->glossaryId) {
+            $this->logger->debug(
+                $this->prefixLog(
+                    'OpenAI',
+                    'using glossary',
+                ),
+                [
+                    'glossaryId' => $payload->glossaryId,
+                ],
+            );
+            $glossary = $this->glossaryRepository->get($payload->glossaryId);
+            $glossaryPrompt = $this->glossaryPrompt;
+
+            foreach ($glossary->entries as $source => $target) {
+                $glossaryPrompt .= "\n- $source => $target";
+            }
+
+            $systemPrompt .= ' ' . $glossaryPrompt;
+        }
+
+        if ($systemPrompt) {
             $messages[] = [
                 'role' => 'system',
-                'content' => $this->systemPrompt,
+                'content' => $systemPrompt,
             ];
         }
 
         $messages[] = [
             'role' => 'user',
-            'content' => 'translate to ' . $payload->targetLanguage->name . ':\n' . $payload->text,
+            'content' => 'translate to ' . $payload->targetLanguage->name . ' language:\n' . $payload->text,
         ];
 
         $this->logger->debug(

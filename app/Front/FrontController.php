@@ -33,4 +33,15 @@ class FrontController
     {
         return view('./documents.view.php');
     }
+
+    #[Get(
+        uri: '/glossaries',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
+    public function glossaries(): View
+    {
+        return view('./glossaries.view.php');
+    }
 }
