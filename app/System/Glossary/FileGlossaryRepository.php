@@ -34,6 +34,8 @@ readonly class FileGlossaryRepository implements GlossaryRepository
 
         /**
          * @var array{
+         *  id: string,
+         *  name: string,
          *  sourceLanguage: string,
          *  targetLanguage: string,
          *  entries: array<string, string>
@@ -44,6 +46,8 @@ readonly class FileGlossaryRepository implements GlossaryRepository
         $target = Language::fromAny($json['targetLanguage']);
 
         return new Glossary(
+            id: $id,
+            name: $json['name'],
             sourceLanguage: $source,
             targetLanguage: $target,
             entries: $json['entries'],
@@ -52,22 +56,38 @@ readonly class FileGlossaryRepository implements GlossaryRepository
 
     public function all(): array
     {
-        return [];
+        $glossaries = [];
+
+        foreach (glob($this->dir . '/*') ?: [] as $file) {
+            if (basename($file) === '.gitignore') {
+                continue;
+            }
+
+            $glossaries[] = $this->get(basename($file));
+        }
+
+        return $glossaries;
     }
 
     public function remove(string $id): void
     {
+        if (! file_exists($this->dir . '/' . $id)) {
+            throw new \RuntimeException('Glossary not found');
+        }
+
+        unlink($this->dir . '/' . $id);
     }
 
     public function save(Glossary $glossary): string
     {
+        $id = uuid_create();
         $json = [
+            'id' => $id,
+            'name' => $glossary->name,
             'sourceLanguage' => $glossary->sourceLanguage->lower(),
             'targetLanguage' => $glossary->targetLanguage->lower(),
             'entries' => $glossary->entries,
         ];
-
-        $id = uuid_create();
 
         file_put_contents($this->dir . '/' . $id, json_encode($json));
 

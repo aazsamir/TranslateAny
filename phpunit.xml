@@ -26,5 +26,8 @@
     <include>
       <directory suffix=".php">./app</directory>
     </include>
+    <exclude>
+      <directory suffix=".view.php">./app/Front</directory>
+    </exclude>
   </source>
 </phpunit>
