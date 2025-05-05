@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace Tests\Integration\Front;
 
 use Tests\Integration\TestCase;
-use Tests\IntegrationTestCase;
 
 /**
  * @internal
  */
 final class FrontTest extends TestCase
 {
-    public function test_index(): void
+    public function testIndex(): void
     {
         $this->http->get('/')->assertOk()->assertSee('TranslateAny');
+    }
+
+    public function testDocuments(): void
+    {
+        $this->http->get('/documents')->assertOk()->assertSee('TranslateAny');
     }
 }
