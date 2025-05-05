@@ -7,7 +7,7 @@ namespace Tests\Unit\Utils;
 use App\Engine\TranslatePayload;
 use App\System\Language;
 
-class PayloadFixture
+class TranslatePayloadFixture
 {
     public static function get(): TranslatePayload
     {

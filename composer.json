@@ -1,13 +1,14 @@
 {
     "name": "aazsamir/translateany",
     "require": {
-        "tempest/framework": "v1.0.0-alpha.6",
+        "tempest/framework": "dev-main",
         "openai-php/client": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.2 || ^11.5",
         "symfony/var-dumper": "^7.1",
-        "carthage-software/mago": "^0.20.2"
+        "carthage-software/mago": "^0.20.2",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -35,9 +36,11 @@
         "phpunit": "vendor/bin/phpunit --display-warnings --display-skipped --display-deprecations --display-errors --display-notices",
         "mago:fmt": "vendor/bin/mago fmt",
         "mago:lint": "vendor/bin/mago lint --fix && vendor/bin/mago lint",
+        "phpstan": "vendor/bin/phpstan",
         "qa": [
             "composer mago:fmt",
             "composer phpunit",
+            "composer phpstan",
             "composer mago:lint"
         ]
     },

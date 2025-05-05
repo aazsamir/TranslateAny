@@ -6,9 +6,10 @@ namespace Tests\Unit\Engine\LibreTranslate;
 
 use App\Engine\LibreTranslate\LibreTranslateEngine;
 use App\System\Language;
+use Tests\Mock\NullLogger;
 use Tests\Mock\PsrClientMock;
 use Tests\TestCase;
-use Tests\Unit\Utils\PayloadFixture;
+use Tests\Unit\Utils\TranslatePayloadFixture;
 
 class LibreTranslateEngineTest extends TestCase
 {
@@ -19,8 +20,9 @@ class LibreTranslateEngineTest extends TestCase
     {
         $this->psrClient = new PsrClientMock();
         $this->engine = new LibreTranslateEngine(
-            '',
-            $this->psrClient,
+            url: '',
+            client: $this->psrClient,
+            logger: new NullLogger(),
         );
     }
 
@@ -39,7 +41,7 @@ class LibreTranslateEngineTest extends TestCase
             ],
         );
 
-        $translation = $this->engine->translate(PayloadFixture::get());
+        $translation = $this->engine->translate(TranslatePayloadFixture::get());
 
         $this->assertEquals('Hello world!', $translation->text);
         $this->assertEquals(['Hello world!'], $translation->alternatives);

@@ -6,14 +6,12 @@ namespace App\Api\LibreTranslate\Translate;
 
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
+use App\Middleware\LogMiddleware;
 use App\System\Language;
-use Tempest\Http\Method;
-use Tempest\Http\Status;
-use Tempest\Router\GenericResponse;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Get;
 use Tempest\Router\Post;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class TranslateController
 {
@@ -22,45 +20,28 @@ readonly class TranslateController
     ) {
     }
 
-    #[Post('/libre/translate')]
+    #[Post(
+        uri: '/libre/translate',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(TranslateRequest $request): Response
     {
         return $this->handle($request);
     }
 
-    #[Get('/libre/translate')]
-    public function invokeGet(): Response
+    /**
+     * GET for easy testing, it is not defined in the API spec.
+     */
+    #[Get(
+        uri: '/libre/translate',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
+    public function invokeGet(TranslateRequest $request): Response
     {
-        $q = $_GET['q'] ?? '';
-        $source = $_GET['source'] ?? 'auto';
-        $target = $_GET['target'] ?? '';
-
-        if ($q === '') {
-            return new GenericResponse(
-                status: Status::BAD_REQUEST,
-                body: [
-                    'error' => 'Missing query parameter "q".',
-                ],
-            );
-        }
-
-        if ($target === '') {
-            return new GenericResponse(
-                status: Status::BAD_REQUEST,
-                body: [
-                    'error' => 'Missing query parameter "target".',
-                ],
-            );
-        }
-
-        $request = new TranslateRequest(
-            method: Method::GET,
-            uri: '/libre/translate',
-        );
-        $request->q = $q;
-        $request->source = $source;
-        $request->target = $target;
-
         return $this->handle($request);
     }
 
@@ -71,7 +52,7 @@ readonly class TranslateController
             new TranslatePayload(
                 $request->q,
                 Language::fromAny($request->target),
-                Language::fromAny($source),
+                Language::tryFromAny($source),
                 $request->format,
                 $request->alternatives,
             ),

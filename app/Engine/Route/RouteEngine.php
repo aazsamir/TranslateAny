@@ -7,26 +7,52 @@ namespace App\Engine\Route;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
+use App\System\Logger\PrefixLogger;
+use Tempest\Log\Logger;
+
+use function Tempest\get;
 
 readonly class RouteEngine implements TranslateEngine
 {
+    use PrefixLogger;
+
     /**
-     * @param TranslateRoute[] $routes,
+     * @param TranslateRoute[] $routes
      */
     public function __construct(
         private array $routes,
+        private Logger $logger,
     ) {
     }
 
     public static function new(TranslateRoute ...$routes): self
     {
-        return new self($routes);
+        $lazy = new \ReflectionClass(self::class);
+        $lazy = $lazy->newLazyGhost(function (RouteEngine $object) use ($routes) {
+            $object->__construct(
+                routes: $routes,
+                logger: get(Logger::class),
+            );
+        });
+
+        return $lazy;
     }
 
     public function translate(TranslatePayload $payload): Translation
     {
         foreach ($this->routes as $route) {
             if ($route->supports($payload->targetLanguage)) {
+                $this->logger->debug(
+                    $this->prefixLog(
+                        'Route',
+                        'matched',
+                    ),
+                    [
+                        'lang' => $payload->targetLanguage->lower(),
+                        'route' => $route->engine::class,
+                    ],
+                );
+
                 return $route->engine->translate($payload);
             }
         }
@@ -39,9 +65,11 @@ readonly class RouteEngine implements TranslateEngine
         $languages = [];
 
         foreach ($this->routes as $route) {
-            $languages = array_merge($languages, $route->engine->languages());
+            foreach ($route->engine->languages() as $language) {
+                $languages[$language->language->lower()] = $language;
+            }
         }
 
-        return array_unique($languages);
+        return \array_values($languages);
     }
 }

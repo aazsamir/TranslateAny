@@ -6,9 +6,10 @@ namespace App\Api\LibreTranslate\Detect;
 
 use App\Engine\Detection;
 use App\Engine\DetectionEngine;
+use App\Middleware\LogMiddleware;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Post;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class DetectController
 {
@@ -17,7 +18,12 @@ readonly class DetectController
     ) {
     }
 
-    #[Post('/libre/detect')]
+    #[Post(
+        uri: '/libre/detect',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(DetectRequest $request): Response
     {
         $detections = $this->detectionEngine->detect($request->q);

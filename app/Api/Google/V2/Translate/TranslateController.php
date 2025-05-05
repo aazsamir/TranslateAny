@@ -6,10 +6,11 @@ namespace App\Api\Google\V2\Translate;
 
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
+use App\Middleware\LogMiddleware;
 use App\System\Language;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Post;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class TranslateController
 {
@@ -18,28 +19,33 @@ readonly class TranslateController
     ) {
     }
 
-    #[Post('/google/v2/language/translate/v2')]
+    #[Post(
+        uri: '/google/v2/language/translate/v2',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(TranslateRequest $request): Response
     {
         $translation = $this->translate->translate(
             new TranslatePayload(
                 text: $request->q,
                 targetLanguage: Language::fromAny($request->target),
-                sourceLanguage: Language::fromAny($request->source),
+                sourceLanguage: Language::tryFromAny($request->source),
             ),
         );
 
         $translations = [
             [
                 'translatedText' => $translation->text,
-                'detectedSourceLanguage' => $translation->detectedLanguage->language->lower(),
+                'detectedSourceLanguage' => $translation->detectedLanguage?->language->lower(),
             ],
         ];
 
         foreach ($translation->alternatives as $alt) {
             $translations[] = [
                 'translatedText' => $alt,
-                'detectedSourceLanguage' => $translation->detectedLanguage->language->lower(),
+                'detectedSourceLanguage' => $translation->detectedLanguage?->language->lower(),
             ];
         }
 

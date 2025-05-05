@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Engine;
+namespace App\Engine\Initializer;
 
+use App\Engine\DetectionEngine;
 use App\Engine\Noop\NoopDetectionEngine;
 use App\System\AppConfig;
 use Tempest\Container\Container;

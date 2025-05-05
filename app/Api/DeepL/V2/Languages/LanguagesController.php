@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Api\DeepL\V2\Languages;
 
 use App\Engine\TranslateEngine;
+use App\Middleware\LogMiddleware;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Get;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class LanguagesController
 {
@@ -16,7 +17,12 @@ readonly class LanguagesController
     ) {
     }
 
-    #[Get('/deepl/v2/languages')]
+    #[Get(
+        uri: '/deepl/v2/languages',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(): Response
     {
         $languages = $this->translate->languages();

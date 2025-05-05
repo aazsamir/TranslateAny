@@ -8,8 +8,9 @@ use App\Engine\OpenAI\OpenAIEngine;
 use App\System\Language;
 use OpenAI\Responses\Chat\CreateResponse;
 use OpenAI\Testing\ClientFake;
+use Tests\Mock\NullLogger;
 use Tests\TestCase;
-use Tests\Unit\Utils\PayloadFixture;
+use Tests\Unit\Utils\TranslatePayloadFixture;
 
 class OpenAIEngineTest extends TestCase
 {
@@ -23,6 +24,7 @@ class OpenAIEngineTest extends TestCase
             client: $this->openai,
             model: 'test:1.b',
             systemPrompt: 'test',
+            logger: new NullLogger(),
         );
     }
 
@@ -30,7 +32,7 @@ class OpenAIEngineTest extends TestCase
     {
         $this->openai->addResponses([CreateResponse::fake()]);
 
-        $translation = $this->engine->translate(PayloadFixture::get());
+        $translation = $this->engine->translate(TranslatePayloadFixture::get());
 
         $this->assertEquals(
             'Hello there, this is a fake chat response.',
@@ -52,7 +54,7 @@ class OpenAIEngineTest extends TestCase
             ]),
         ]);
 
-        $translation = $this->engine->translate(PayloadFixture::get());
+        $translation = $this->engine->translate(TranslatePayloadFixture::get());
 
         $this->assertEquals('Hello world!', $translation->text);
     }

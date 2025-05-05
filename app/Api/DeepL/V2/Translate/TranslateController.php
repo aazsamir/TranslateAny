@@ -6,10 +6,11 @@ namespace App\Api\DeepL\V2\Translate;
 
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
+use App\Middleware\LogMiddleware;
 use App\System\Language;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Post;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class TranslateController
 {
@@ -18,7 +19,12 @@ readonly class TranslateController
     ) {
     }
 
-    #[Post('/deepl/v2/translate')]
+    #[Post(
+        uri: '/deepl/v2/translate',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(TranslateRequest $request): Response
     {
         $translations = [];
@@ -28,7 +34,7 @@ readonly class TranslateController
                 new TranslatePayload(
                     text: $text,
                     targetLanguage: Language::fromAny($request->target_lang),
-                    sourceLanguage: Language::fromAny($request->source_lang),
+                    sourceLanguage: Language::tryFromAny($request->source_lang),
                 ),
             );
         }
@@ -38,7 +44,7 @@ readonly class TranslateController
         foreach ($translations as $translation) {
             $response[] = [
                 'text' => $translation->text,
-                'detected_source_language' => $translation->detectedLanguage->language->upper(),
+                'detected_source_language' => $translation->detectedLanguage?->language->upper(),
                 'billed_characters' => 0,
             ];
         }

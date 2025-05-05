@@ -11,14 +11,23 @@ use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
 use App\System\Language;
+use App\System\Logger\PrefixLogger;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
+use ReflectionClass;
+use Tempest\Log\Logger;
+
+use function Tempest\get;
 
 readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
 {
+    use PrefixLogger;
+
     public function __construct(
         private string $url,
         private ClientInterface $client,
+        private Logger $logger,
+        // @phpstan-ignore-next-line
         private ?string $apiKey = null,
     ) {
     }
@@ -27,11 +36,17 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
         string $url = 'https://libretranslate.com',
         ?string $apiKey = null,
     ): self {
-        return new self(
-            url: $url,
-            client: new \GuzzleHttp\Client(),
-            apiKey: $apiKey,
-        );
+        $lazy = new ReflectionClass(self::class);
+        $lazy = $lazy->newLazyGhost(function (LibreTranslateEngine $object) use ($url, $apiKey) {
+            $object->__construct(
+                url: $url,
+                client: new \GuzzleHttp\Client(),
+                apiKey: $apiKey,
+                logger: get(Logger::class),
+            );
+        });
+
+        return $lazy;
     }
 
     public function detect(string $text): array
@@ -42,14 +57,24 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
             headers: [
                 'Content-Type' => 'application/json',
             ],
-            body: json_encode([
-                'q' => $text,
-            ]),
+            body: json_encode(
+                [
+                    'q' => $text,
+                ],
+                flags: JSON_THROW_ON_ERROR,
+            ),
         );
         $response = $this->client->sendRequest($request);
+        /**
+         * @var array{
+         *  language: string,
+         *  confidence: float,
+         * }[]
+         */
         $response = json_decode($response->getBody()->getContents(), true);
 
         if (isset($response['error'])) {
+            // @phpstan-ignore-next-line
             throw new \RuntimeException('Error: ' . $response['error']);
         }
 
@@ -83,16 +108,43 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
             $request['alternatives'] = $payload->alternatives;
         }
 
+        $this->logger->debug(
+            $this->prefixLog(
+                'LibreTranslate',
+                'translate',
+            ),
+            $request,
+        );
+
         $request = new Request(
             method: 'POST',
             uri: $this->url . '/translate',
             headers: [
                 'Content-Type' => 'application/json',
             ],
-            body: json_encode($request),
+            body: json_encode($request, flags: JSON_THROW_ON_ERROR),
         );
         $response = $this->client->sendRequest($request);
+        /**
+         * @var array{
+         *  translatedText: string,
+         *  alternatives?: array<string>,
+         *  detectedLanguage?: array{
+         *      language: string,
+         *      confidence: float,
+         *  },
+         *  error?: string,
+         * }
+         */
         $response = json_decode($response->getBody()->getContents(), true);
+
+        $this->logger->debug(
+            $this->prefixLog(
+                'LibreTranslate',
+                'translated',
+            ),
+            $response,
+        );
 
         if (isset($response['error'])) {
             throw new \RuntimeException('Error: ' . $response['error']);
@@ -118,9 +170,17 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectionEngine
             ],
         );
         $response = $this->client->sendRequest($request);
+        /**
+         * @var array{
+         *  code: string,
+         *  name: string,
+         *  targets: array<string>,
+         * }[]
+         */
         $response = json_decode($response->getBody()->getContents(), true);
 
         if (isset($response['error'])) {
+            // @phpstan-ignore-next-line
             throw new \RuntimeException('Error: ' . $response['error']);
         }
 

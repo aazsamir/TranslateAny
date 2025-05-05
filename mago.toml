@@ -7,6 +7,7 @@ excludes = [
   "./vendor/symfony/cache/Traits/ValueWrapper.php",
   "./vendor/composer",
   "./app/Config/app.config.php",
+  "./app/Config/log.config.php",
 ]
 
 [format]

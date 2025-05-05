@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Engine;
+namespace App\Engine\Initializer;
 
-use App\Engine\LibreTranslate\LibreTranslateConfig;
-use App\Engine\LibreTranslate\LibreTranslateEngine;
 use App\Engine\Noop\NoopTranslateEngine;
-use App\Engine\OpenAI\OpenAIConfig;
-use App\Engine\OpenAI\OpenAIEngine;
+use App\Engine\TranslateEngine;
 use App\System\AppConfig;
 use Tempest\Container\Container;
 use Tempest\Container\Initializer;

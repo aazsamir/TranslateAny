@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Api\Google\V2\Detect;
 
 use App\Engine\DetectionEngine;
+use App\Middleware\LogMiddleware;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Post;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class DetectController
 {
@@ -16,7 +17,12 @@ readonly class DetectController
     ) {
     }
 
-    #[Post('/google/v2/language/translate/v2/detect')]
+    #[Post(
+        uri: '/google/v2/language/translate/v2/detect',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(DetectRequest $request): Response
     {
         $detection = $this->detection->detect(

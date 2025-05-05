@@ -9,6 +9,9 @@
         displayDetailsOnTestsThatTriggerNotices="true"
         displayDetailsOnTestsThatTriggerWarnings="true"
 >
+  <php>
+    <env name="ENVIRONMENT" value="testing"/>
+  </php>
   <testsuites>
     <testsuite name="Unit">
       <directory suffix="Test.php">./tests</directory>

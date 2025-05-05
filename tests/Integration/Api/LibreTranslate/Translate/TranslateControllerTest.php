@@ -34,4 +34,33 @@ class TranslateControllerTest extends TestCase
             $body,
         );
     }
+
+    public function testGet(): void
+    {
+        $query = [
+            'q' => 'Hello world!',
+            'source' => 'auto',
+            'target' => 'pl',
+        ];
+        $query = http_build_query($query);
+        $response = $this->http->get('/libre/translate?' . $query);
+
+        $response->assertOk();
+        $body = $response->body;
+
+        $this->assertIsArray($body);
+        $this->assertSame(
+            [
+                'translatedText' => 'Hello world!',
+                'alternatives' => [
+                    'Hello world!',
+                ],
+                'detectedLanguage' => [
+                    'confidence' => 0.5,
+                    'language' => 'en',
+                ],
+            ],
+            $body,
+        );
+    }
 }

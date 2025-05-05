@@ -8,6 +8,7 @@ use Tempest\Support\IsEnumHelper;
 
 enum Language: string
 {
+    // @phpstan-ignore-next-line
     use IsEnumHelper;
 
     case aa = 'Afar';
@@ -193,13 +194,18 @@ enum Language: string
     case zh = 'Chinese';
     case zu = 'Zulu';
 
-    public static function fromAny(?string $name): ?self
+    public static function fromAny(string $name): self
+    {
+        return self::fromName(strtolower($name));
+    }
+
+    public static function tryFromAny(?string $name): ?self
     {
         if ($name === null) {
             return null;
         }
 
-        return self::fromName(strtolower($name));
+        return self::tryFromName(strtolower($name));
     }
 
     /**

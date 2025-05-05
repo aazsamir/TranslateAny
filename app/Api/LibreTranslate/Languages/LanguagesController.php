@@ -6,10 +6,11 @@ namespace App\Api\LibreTranslate\Languages;
 
 use App\Engine\AvailableLanguage;
 use App\Engine\TranslateEngine;
+use App\Middleware\LogMiddleware;
 use App\System\Language;
+use Tempest\Http\Response;
+use Tempest\Http\Responses\Ok;
 use Tempest\Router\Get;
-use Tempest\Router\Response;
-use Tempest\Router\Responses\Ok;
 
 readonly class LanguagesController
 {
@@ -18,7 +19,12 @@ readonly class LanguagesController
     ) {
     }
 
-    #[Get('/libre/languages')]
+    #[Get(
+        uri: '/libre/languages',
+        middleware: [
+            LogMiddleware::class,
+        ],
+    )]
     public function __invoke(): Response
     {
         $languages = $this->engine->languages();

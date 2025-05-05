@@ -19,7 +19,7 @@ readonly class TranslateRoute
     }
 
     /**
-     * @param Language[]
+     * @param Language[]|null $languages
      */
     public static function new(
         TranslateEngine $engine,

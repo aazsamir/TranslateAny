@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Api\Google\V2\Translate;
 
-use Tempest\Router\IsRequest;
-use Tempest\Router\Request;
+use Tempest\Http\IsRequest;
+use Tempest\Http\Request;
 
 class TranslateRequest implements Request
 {

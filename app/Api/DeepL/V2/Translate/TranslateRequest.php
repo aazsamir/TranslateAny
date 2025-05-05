@@ -4,40 +4,9 @@ declare(strict_types=1);
 
 namespace App\Api\DeepL\V2\Translate;
 
-use Tempest\Router\IsRequest;
-use Tempest\Router\Request;
+use Tempest\Http\IsRequest;
+use Tempest\Http\Request;
 
-// {
-//     "text": [
-//       "Hello, World!"
-//     ],
-//     "source_lang": "EN",
-//     "target_lang": "DE",
-//     "context": "string",
-//     "show_billed_characters": true,
-//     "split_sentences": "1",
-//     "preserve_formatting": false,
-//     "formality": "default",
-//     "model_type": "quality_optimized",
-//     "glossary_id": "def3a26b-3e84-45b3-84ae-0c0aaf3525f7",
-//     "tag_handling": "xml",
-//     "outline_detection": true,
-//     "non_splitting_tags": [
-//       "a",
-//       "p",
-//       "span"
-//     ],
-//     "splitting_tags": [
-//       "a",
-//       "p",
-//       "span"
-//     ],
-//     "ignore_tags": [
-//       "a",
-//       "p",
-//       "span"
-//     ]
-//   }
 class TranslateRequest implements Request
 {
     use IsRequest;

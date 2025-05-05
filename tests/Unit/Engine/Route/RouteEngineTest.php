@@ -11,6 +11,7 @@ use App\Engine\Route\TranslateRoute;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
 use App\System\Language;
+use Tests\Mock\NullLogger;
 use Tests\Mock\TranslateEngineMock;
 use Tests\TestCase;
 
@@ -20,24 +21,27 @@ class RouteEngineTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->engine = new RouteEngine([
-            new TranslateRoute(
-                languages: [Language::en],
-                engine: new TranslateEngineMock(
-                    new Translation(
-                        text: 'first',
+        $this->engine = new RouteEngine(
+            routes: [
+                TranslateRoute::new(
+                    languages: [Language::en],
+                    engine: new TranslateEngineMock(
+                        new Translation(
+                            text: 'first',
+                        ),
                     ),
                 ),
-            ),
-            new TranslateRoute(
-                languages: null,
-                engine: new TranslateEngineMock(
-                    new Translation(
-                        text: 'second',
+                TranslateRoute::new(
+                    languages: null,
+                    engine: new TranslateEngineMock(
+                        new Translation(
+                            text: 'second',
+                        ),
                     ),
                 ),
-            ),
-        ]);
+            ],
+            logger: new NullLogger(),
+        );
     }
 
     public function testFirstMatching(): void
@@ -62,5 +66,26 @@ class RouteEngineTest extends TestCase
         $translation = $this->engine->translate($payload);
 
         $this->assertEquals('second', $translation->text);
+    }
+
+    public function testNoMatching(): void
+    {
+        $payload = new TranslatePayload(
+            text: 'test',
+            targetLanguage: Language::fr,
+        );
+
+        $engine = new RouteEngine([], new NullLogger());
+
+        $this->expectException(\RuntimeException::class);
+
+        $engine->translate($payload);
+    }
+
+    public function testLanguages(): void
+    {
+        $languages = $this->engine->languages();
+
+        $this->assertCount(2, $languages);
     }
 }
