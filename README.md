@@ -65,6 +65,8 @@ return new AppConfig(
     translate: ChatEngine::new(
         client: OpenAIClient::new(
             host: 'http://localhost:11434/v1',
+            // or if you are using docker-compose 
+            // host: 'http://host.docker.internal:11434/v1', 
             model: 'qwen3:14b',
         ),
     ),
