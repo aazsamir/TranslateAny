@@ -37,7 +37,7 @@ php tempest create-config
 
 If you don't have `php` installed, use `docker compose` to run wizard.
 ```shell
-docker compose run --rm config-builder
+docker compose run --rm translateany php tempest create-config
 ```
 
 ## Manual configuration

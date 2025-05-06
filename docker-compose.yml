@@ -7,11 +7,5 @@ services:
       - "8000:80"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-  config-builder:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: ["php", "tempest", "create-config"]
     volumes:
       - ./app/Config:/var/www/html/app/Config
