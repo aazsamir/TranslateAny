@@ -8,7 +8,7 @@ excludes = [
   "./vendor/composer",
   "./app/Config/app.config.php",
   "./app/Config/log.config.php",
-  "./app/System/ConfigBuilder/ConfigBuilderCommand.php",
+  "./app/Cli/ConfigBuilder/ConfigBuilderCommand.php",
 ]
 
 [format]

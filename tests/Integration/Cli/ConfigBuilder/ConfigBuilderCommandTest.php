@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration\System\ConfigBuilder;
+namespace Tests\Integration\Cli\ConfigBuilder;
 
 use Tests\Integration\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\System\ConfigBuilder;
+namespace App\Cli\ConfigBuilder;
 
 use App\System\AppConfig;
 use Tempest\Console\Console;
