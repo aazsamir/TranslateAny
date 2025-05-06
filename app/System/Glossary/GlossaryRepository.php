@@ -8,7 +8,7 @@ interface GlossaryRepository
 {
     public function exists(string $id): bool;
 
-    public function get(string $id): Glossary;
+    public function get(?string $id): ?Glossary;
 
     /**
      * @return Glossary[]

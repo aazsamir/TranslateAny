@@ -46,17 +46,16 @@ Copy `app/Config/app.config.php.example` to `app/Config/app.config.php`.
 ```php
 <?php
 // app/Config/app.config.php
+use App\Engine\Chat\ChatEngine;
+use App\Engine\OpenAI\OpenAIClient;
 use App\System\AppConfig;
-use App\Engine\OpenAI\OpenAIConfig;
 
 return new AppConfig(
-    translate: OpenAIEngine::new(
-        // ollama host, /v1 is OpenAI API compatible endpoint 
-        host: 'http://localhost:11434/v1',
-        // or if you are using docker-compose 
-        // host: 'http://host.docker.internal:11434/v1', 
-        model: 'Bielik-11B-v2.3:IQ4_XS',
-        systemPrompt: 'You are an automated translation system. Translate text to the target language. Do not add any additional information or context, just the translation.',
+    translate: ChatEngine::new(
+        client: OpenAIClient::new(
+            host: 'http://localhost:11434/v1',
+            model: 'qwen3:14b',
+        ),
     ),
 );
 ```
@@ -65,27 +64,30 @@ You may use different engines depending on target language by wrapping them in `
 ```php
 <?php
 // app/Config/app.config.php
-use App\System\AppConfig;
-use App\Engine\OpenAI\OpenAIEngine;
+use App\Engine\Chat\ChatEngine;
+use App\Engine\OpenAI\OpenAIClient;
 use App\Engine\Route\RouteEngine;
 use App\Engine\Route\TranslateRoute;
+use App\System\AppConfig;
 use App\System\Language;
 
 return new AppConfig(
     translate: RouteEngine::new(
         TranslateRoute::new(
-            engine: OpenAIEngine::new(
-                host: 'http://localhost:11434/v1',
-                model: 'Bielik-11B-v2.3:IQ4_XS',
+            engine: ChatEngine::new(
+                client: OpenAIClient::new(
+                    model: 'Bielik-11B-v2.3:IQ4_XS'
+                ),
             ),
             languages: [
-                Language::pl,
+                Language::en
             ],
         ),
         TranslateRoute::new(
-            engine: OpenAIEngine::new(
-                host: 'http://localhost:11434/v1',
-                model: 'qwen3:14b',
+            engine: ChatEngine::new(
+                client: OpenAIClient::new(
+                    model: 'qwen3:14b',
+                ),
             ),
         ),
     ),
@@ -97,14 +99,14 @@ Depending on your needs, you may want to cache the translation results. You can 
 <?php
 // app/Config/app.config.php
 use App\Engine\Cache\CacheEngine;
-use App\Engine\OpenAI\OpenAIEngine;
+use App\Engine\Chat\ChatEngine;
+use App\Engine\OpenAI\OpenAIClient;
 use App\System\AppConfig;
 
 return new AppConfig(
     translate: CacheEngine::new(
-        engine: OpenAIEngine::new(
-            model: 'Bielik-11B-v2.3:IQ4_XS',
-            host: 'http://localhost:11434/v1',
+        engine: ChatEngine::new(
+            client: OpenAIClient::new(),
         ),
         cacheMinutes: 5,
     ),
@@ -115,13 +117,34 @@ To access language detection, configure `detection` in `app/Config/app.config.ph
 ```php
 <?php
 // app/Config/app.config.php
-use App\Engine\OpenAI\OpenAIDetectEngine;
+use App\Engine\Chat\ChatDetectEngine;
+use App\Engine\OpenAI\OpenAIClient;
 use App\System\AppConfig;
 
 return new AppConfig(
-    detection: OpenAIDetectEngine::new(
-        host: 'http://localhost:11434/v1',
-        model: 'hf.co/unsloth/Qwen3-1.7B-GGUF:IQ4_XS',
+    detection: ChatDetectEngine::new(
+        client: OpenAIClient::new(),
+    ),
+);
+```
+
+If you are using Ollama and need better control over the model, use `OllamaClient`.
+```php
+use App\Engine\Chat\ChatEngine;
+use App\Engine\Ollama\OllamaClient;
+use App\Engine\Ollama\OllamaSettings;
+use App\System\AppConfig;
+
+return new AppConfig(
+    translate: ChatEngine::new(
+        client: OllamaClient::new(
+            model: 'qwen3:14b',
+            settings: OllamaSettings::new(
+                minP: 0.1,
+                temperature: 0.4,
+                stop: ["\n"],
+            ),
+        ),
     ),
 );
 ```

@@ -16,4 +16,21 @@ readonly class AvailableLanguage
         public array $targets = [],
     ) {
     }
+
+    /**
+     * @return AvailableLanguage[]
+     */
+    public static function all(): array
+    {
+        $languages = [];
+
+        foreach (Language::cases() as $language) {
+            $languages[] = new AvailableLanguage(
+                language: $language,
+                targets: Language::cases(),
+            );
+        }
+
+        return $languages;
+    }
 }

@@ -35,8 +35,12 @@ class GlossaryRepositoryMock implements GlossaryRepository
         return isset($this->glossaries[$id]);
     }
 
-    public function get(string $id): Glossary
+    public function get(?string $id): ?Glossary
     {
+        if ($id === null) {
+            return null;
+        }
+
         if (! isset($this->glossaries[$id])) {
             throw new \InvalidArgumentException("Glossary with ID $id does not exist.");
         }

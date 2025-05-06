@@ -24,8 +24,12 @@ readonly class FileGlossaryRepository implements GlossaryRepository
         return file_exists($this->dir . '/' . $id);
     }
 
-    public function get(string $id): Glossary
+    public function get(?string $id): ?Glossary
     {
+        if ($id === null) {
+            return null;
+        }
+
         $content = file_get_contents($this->dir . '/' . $id);
 
         if ($content === false) {
@@ -63,7 +67,13 @@ readonly class FileGlossaryRepository implements GlossaryRepository
                 continue;
             }
 
-            $glossaries[] = $this->get(basename($file));
+            $glossary = $this->get(basename($file));
+
+            if ($glossary === null) {
+                continue;
+            }
+
+            $glossaries[] = $glossary;
         }
 
         return $glossaries;

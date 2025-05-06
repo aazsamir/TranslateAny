@@ -13,6 +13,7 @@ use DateTimeInterface;
 use Tempest\Http\GenericResponse;
 use Tempest\Http\Response;
 use Tempest\Http\Responses\Created;
+use Tempest\Http\Responses\NotFound;
 use Tempest\Http\Responses\Ok;
 use Tempest\Http\Status;
 use Tempest\Router\Delete;
@@ -101,6 +102,10 @@ readonly class GlossariesController
     {
         $glossary = $this->glossaryRepository->get($id);
 
+        if ($glossary === null) {
+            return new NotFound();
+        }
+
         $response = [
             'glossary_id' => $glossary->id,
             'name' => $glossary->name,
@@ -138,6 +143,11 @@ readonly class GlossariesController
     public function entires(string $id): Response
     {
         $glossary = $this->glossaryRepository->get($id);
+
+        if ($glossary === null) {
+            return new NotFound();
+        }
+
         $response = [];
 
         foreach ($glossary->entries as $source => $target) {

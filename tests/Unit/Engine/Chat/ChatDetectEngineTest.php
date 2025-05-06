@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Engine\OpenAI;
 
-use App\Engine\OpenAI\OpenAIDetectEngine;
+use App\Engine\Chat\ChatDetectEngine;
 use App\System\Language;
-use OpenAI\Responses\Chat\CreateResponse;
-use OpenAI\Testing\ClientFake;
+use Tests\Mock\ChatClientMock;
 use Tests\Mock\NullLogger;
 use Tests\TestCase;
 
-class OpenAIDetectEngineTest extends TestCase
+class ChatDetectEngineTest extends TestCase
 {
-    private ClientFake $client;
-    private OpenAIDetectEngine $engine;
+    private ChatClientMock $client;
+    private ChatDetectEngine $engine;
 
     protected function setUp(): void
     {
-        $this->client = new ClientFake();
-        $this->engine = new OpenAIDetectEngine(
+        $this->client = new ChatClientMock();
+        $this->engine = new ChatDetectEngine(
             client: $this->client,
-            model: 'test:1.b',
             systemPrompt: 'test',
             logger: new NullLogger(),
         );
@@ -29,16 +27,7 @@ class OpenAIDetectEngineTest extends TestCase
 
     public function testDetect(): void
     {
-        $this->client->addResponses([CreateResponse::fake([
-            'choices' => [
-                [
-                    'message' => [
-                        'content' => 'This text is in English.',
-                    ],
-                ],
-            ],
-        ])]);
-
+        $this->client->response = 'This text is in English.';
         $result = $this->engine->detect('Hello world!');
 
         $this->assertCount(1, $result);
@@ -49,15 +38,7 @@ class OpenAIDetectEngineTest extends TestCase
 
     public function testDetectFromThinkingTags(): void
     {
-        $this->client->addResponses([CreateResponse::fake([
-            'choices' => [
-                [
-                    'message' => [
-                        'content' => '<think>This may be both English and Polish</think> I dont know.',
-                    ],
-                ],
-            ],
-        ])]);
+        $this->client->response = '<think>This may be both English and Polish</think> I dont know.';
 
         $result = $this->engine->detect('Hello world!');
 

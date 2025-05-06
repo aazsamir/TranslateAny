@@ -2,29 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Engine\OpenAI;
+namespace Tests\Unit\Engine\Chat;
 
-use App\Engine\OpenAI\OpenAIEngine;
-use App\System\Language;
-use OpenAI\Responses\Chat\CreateResponse;
-use OpenAI\Testing\ClientFake;
+use App\Engine\Chat\ChatEngine;
+use Tests\Mock\ChatClientMock;
 use Tests\Mock\GlossaryRepositoryMock;
 use Tests\Mock\NullLogger;
 use Tests\TestCase;
 use Tests\Unit\Utils\TranslatePayloadFixture;
 
-class OpenAIEngineTest extends TestCase
+class ChatEngineTest extends TestCase
 {
-    private ClientFake $openai;
-    private OpenAIEngine $engine;
+    private ChatClientMock $client;
+    private ChatEngine $engine;
 
     protected function setUp(): void
     {
-        $this->openai = new ClientFake();
-        $this->engine = new OpenAIEngine(
-            client: $this->openai,
-            model: 'test:1.b',
+        $this->client = new ChatClientMock();
+        $this->engine = new ChatEngine(
+            client: $this->client,
             systemPrompt: 'test',
+            glossaryPrompt: 'test',
             logger: new NullLogger(),
             glossaryRepository: new GlossaryRepositoryMock(),
         );
@@ -32,8 +30,6 @@ class OpenAIEngineTest extends TestCase
 
     public function testTranslate(): void
     {
-        $this->openai->addResponses([CreateResponse::fake()]);
-
         $translation = $this->engine->translate(TranslatePayloadFixture::get());
 
         $this->assertEquals(
@@ -44,17 +40,7 @@ class OpenAIEngineTest extends TestCase
 
     public function testThinkTagsRemoval(): void
     {
-        $this->openai->addResponses([
-            CreateResponse::fake([
-                'choices' => [
-                    [
-                        'message' => [
-                            'content' => "<think>Let's think</think>\nHello world!",
-                        ],
-                    ],
-                ],
-            ]),
-        ]);
+        $this->client->response = "<think>Let's think</think>\nHello world!";
 
         $translation = $this->engine->translate(TranslatePayloadFixture::get());
 

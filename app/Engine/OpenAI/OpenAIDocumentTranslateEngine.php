@@ -75,7 +75,7 @@ readonly class OpenAIDocumentTranslateEngine implements DocumentTranslateEngine
 
             $message = [
                 'role' => 'user',
-                'content' => 'page to translate to ' . $payload->targetLanguage->name . ':\n' . $page,
+                'content' => 'Translate to ' . $payload->targetLanguage->value . ' language:\n' . $page,
             ];
 
             if (isset($userHistory[$i - 1])) {

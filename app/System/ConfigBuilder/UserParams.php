@@ -24,6 +24,11 @@ class UserParams
         return $this->translateEngine === 'openai';
     }
 
+    public function isOllamaTranslate(): bool
+    {
+        return $this->translateEngine === 'ollama';
+    }
+
     public function isLibreTranslate(): bool
     {
         return $this->translateEngine === 'libre';
@@ -42,6 +47,11 @@ class UserParams
     public function isOpenAIDetect(): bool
     {
         return $this->detectEngine === 'openai';
+    }
+
+    public function isOllamaDetect(): bool
+    {
+        return $this->detectEngine === 'ollama';
     }
 
     public function isLibreDetect(): bool

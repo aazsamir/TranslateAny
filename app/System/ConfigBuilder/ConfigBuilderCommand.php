@@ -32,61 +32,49 @@ class ConfigBuilderCommand
     {
         $params = new UserParams();
         $this->console->info('TranslateAny config creator.');
+        $this->translateEngine($params);
+        $this->translateParams($params);
+        $this->translateCache($params);
+        $this->detection($params);
+
+        return $params;
+    }
+
+    private function translateEngine(UserParams $params): void
+    {
         $params->translateEngine = $this->console->ask(
             question: 'What engine will you use?',
             options: [
                 'openai' => 'OpenAI API compatible server',
+                'ollama' => 'Ollama',
                 'libre' => 'LibreTranslate',
                 'noop' => 'No translation',
             ],
             default: 'openai',
         );
+    }
 
+    private function translateParams(UserParams $params): void
+    {
         if ($params->isOpenAITranslate()) {
-            $this->console->info('What model will you use? For example: gpt-3.5-turbo, qwen3:14b, etc.');
-            $model = $this->console->readln();
-            $model = trim($model);
-            $params->translateModel = $model;
+            $params->translateModel = $this->openAiModel();
+            $params->translateHost = $this->openAiHost();
+            $params->translateApiKey = $this->openAIApiKey();
+        }
 
-            $host = $this->console->ask(
-                question: 'What is the host of your OpenAI API compatible server?',
-                options: [
-                    'https://api.openai.com/v1',
-                    'http://localhost:11434/v1',
-                    'http://host.docker.internal:11434/v1',
-                    'custom',
-                ],
-                default: 'http://localhost:11434/v1',
-            );
-
-            if ($host === 'custom') {
-                $this->console->info('What is the host of your OpenAI API compatible server? For example: http://localhost:11434/v1');
-                $host = $this->console->readln();
-                $host = trim($host);
-            }
-
-            $params->translateHost = $host;
-
-            $this->console->info('What is your OpenAI API key? If you are using a local server, you can leave this blank.');
-            $key = $this->console->readln();
-            $key = trim($key);
-            $key = $key === '' ? null : $key;
-            $params->translateApiKey = $key;
+        if ($params->isOllamaTranslate()) {
+            $params->translateModel = $this->ollamaModel();
+            $params->translateHost = $this->ollamaHost();
         }
 
         if ($params->isLibreTranslate()) {
-            $this->console->info('What is the host of your LibreTranslate server? For example: http://localhost:5000');
-            $host = $this->console->readln();
-            $host = trim($host);
-            $params->translateHost = $host;
-
-            $this->console->info('What is your LibreTranslate API key? If you are using a local server, you can leave this blank.');
-            $key = $this->console->readln();
-            $key = trim($key);
-            $key = $key === '' ? null : $key;
-            $params->translateApiKey = $key;
+            $params->translateHost = $this->libreTranslateHost();
+            $params->translateApiKey = $this->libreTranslateApiKey();
         }
+    }
 
+    private function translateCache(UserParams $params): void
+    {
         if (!$params->isNoopTranslate()) {
             $params->translateWithCache = (bool) $this->console->ask(
                 question: 'Do you want to cache responses?',
@@ -121,7 +109,10 @@ class ConfigBuilderCommand
                 $params->translateCacheTime = (int) $cache;
             }
         }
+    }
 
+    private function detection(UserParams $params): void
+    {
         $withDetection = $this->console->ask(
             question: 'Do you want to configure language detection?',
             options: [
@@ -136,6 +127,7 @@ class ConfigBuilderCommand
                 question: 'What language detection engine will you use?',
                 options: [
                     'openai' => 'OpenAI API compatible server',
+                    'ollama' => 'Ollama',
                     'libre' => 'LibreTranslate',
                     'noop' => 'No detection',
                 ],
@@ -144,22 +136,24 @@ class ConfigBuilderCommand
         }
 
         if ($params->isOpenAIDetect()) {
-            $this->console->info('What model will you use for language detection? For example: gpt-3.5-turbo, qwen3:14b, etc.');
-            $detectionModel = $this->console->readln();
-            $detectionModel = trim($detectionModel);
-            $params->detectModel = $detectionModel;
+            $params->detectModel = $this->openAiModel();
 
             if ($params->isOpenAITranslate()) {
                 $params->detectHost = $params->translateHost;
                 $params->detectApiKey = $params->translateApiKey;
             } else {
-                $this->console->info('What is the host of your OpenAI API compatible server? For example: http://localhost:11434/v1');
-                $params->detectHost = $this->console->readln();
-                $params->detectHost = trim($params->detectHost);
+                $params->detectHost = $this->openAiHost();
+                $params->detectApiKey = $this->openAIApiKey();
+            }
+        }
 
-                $this->console->info('What is your OpenAI API key? If you are using a local server, you can leave this blank.');
-                $params->detectApiKey = $this->console->readln();
-                $params->detectApiKey = trim($params->detectApiKey);
+        if ($params->isOllamaDetect()) {
+            $params->detectModel = $this->ollamaModel();
+
+            if ($params->isOllamaTranslate()) {
+                $params->detectHost = $params->translateHost;
+            } else {
+                $params->detectHost = $this->ollamaHost();
             }
         }
 
@@ -168,18 +162,95 @@ class ConfigBuilderCommand
                 $params->detectHost = $params->translateHost;
                 $params->detectApiKey = $params->translateApiKey;
             } else {
-                $this->console->info('What is the host of your LibreTranslate server? For example: http://localhost:5000');
-                $params->detectHost = $this->console->readln();
-                $params->detectHost = trim($params->detectHost);
-
-                $this->console->info('What is your LibreTranslate API key? If you are using a local server, you can leave this blank.');
-                $params->detectApiKey = $this->console->readln();
-                $params->detectApiKey = trim($params->detectApiKey);
-                $params->detectApiKey = $params->detectApiKey === '' ? null : $params->detectApiKey;
+                $params->detectHost = $this->libreTranslateHost();
+                $params->detectApiKey = $this->libreTranslateApiKey();
             }
         }
+    }
 
-        return $params;
+    private function openAiModel(): string
+    {
+        $model = $this->read('What model will you use? For example: gpt-3.5-turbo, qwen3:14b, etc.');
+        $model = trim($model);
+
+        return $model;
+    }
+
+    private function openAiHost(): string
+    {
+        $translateHost = $this->console->ask(
+            question: 'What is the host of your OpenAI API compatible server?',
+            options: [
+                'https://api.openai.com/v1',
+                'http://localhost:11434/v1',
+                'http://host.docker.internal:11434/v1',
+                'custom',
+            ],
+            default: 'http://localhost:11434/v1',
+        );
+
+        if ($translateHost === 'custom') {
+            $translateHost = $this->read('What is the host of your OpenAI API compatible server? For example: http://localhost:11434/v1');
+        }
+
+        return $translateHost;
+    }
+
+    private function openAIApiKey(): ?string
+    {
+        $key = $this->read('What is your OpenAI API key? If you are using a local server, you can leave this blank.');
+        $key = $key === '' ? null : $key;
+
+        return $key;
+    }
+
+    private function ollamaModel(): string
+    {
+        $model = $this->read('What model will you use? For example: qwen3:14b, etc.');
+        $model = trim($model);
+
+        return $model;
+    }
+
+    private function ollamaHost(): string
+    {
+        $translateHost = $this->console->ask(
+            question: 'What is the host of your Ollama server?',
+            options: [
+                'http://localhost:11434',
+                'http://host.docker.internal:11434',
+                'custom',
+            ],
+            default: 'http://localhost:11434',
+        );
+
+        if ($translateHost === 'custom') {
+            $translateHost = $this->read('What is the host of your Ollama server? For example: http://localhost:11434');
+        }
+
+        return $translateHost;
+    }
+
+    private function libreTranslateHost(): string
+    {
+        return $this->read('What is the host of your LibreTranslate server? For example: http://localhost:5000');
+    }
+
+    private function libreTranslateApiKey(): ?string
+    {
+        $key = $this->read('What is your LibreTranslate API key? If you are using a local server, you can leave this blank.');
+        $key = $key === '' ? null : $key;
+
+        return $key;
+    }
+
+    private function read(string $question): string
+    {
+        $this->console->info($question);
+        $input = $this->console->readln();
+        $input = trim($input);
+
+        return $input;
     }
 
     private function createConfigFile(UserParams $params): void
@@ -190,8 +261,10 @@ class ConfigBuilderCommand
         // Feel free to edit it however you want.
 
         use App\Engine\Cache\CacheEngine;
-        use App\Engine\OpenAI\OpenAIEngine;
-        use App\Engine\OpenAI\OpenAIDetectEngine;
+        use App\Engine\Chat\ChatEngine;
+        use App\Engine\Chat\ChatDetectEngine;
+        use App\Engine\OpenAI\OpenAIClient;
+        use App\Engine\Ollama\OllamaClient;
         use App\Engine\LibreTranslate\LibreTranslateEngine;
         use App\Engine\Noop\NoopTranslateEngine;
         use App\Engine\Noop\NoopDetectEngine;
@@ -205,10 +278,23 @@ class ConfigBuilderCommand
 
         if ($params->isOpenAITranslate()) {
             $translate = <<<PHP
-            OpenAIEngine::new(
-                model: '$params->translateModel',
-                host: '$params->translateHost',
-                apiKey: '$params->translateApiKey',
+            ChatEngine::new(
+                client: OpenAIClient::new(
+                    host: "$params->translateHost",
+                    apiKey: "$params->translateApiKey",
+                    model: "$params->translateModel",
+                ),
+            )
+            PHP;
+        }
+
+        if ($params->isOllamaTranslate()) {
+            $translate = <<<PHP
+            ChatEngine::new(
+                client: OllamaClient::new(
+                    host: "$params->translateHost",
+                    model: "$params->translateModel",
+                ),
             )
             PHP;
         }
@@ -216,8 +302,8 @@ class ConfigBuilderCommand
         if ($params->isLibreTranslate()) {
             $translate = <<<PHP
             LibreTranslateEngine::new(
-                host: '$params->translateHost',
-                apiKey: '$params->translateApiKey',
+                host: "$params->translateHost",
+                apiKey: "$params->translateApiKey",
             )
             PHP;
         }
@@ -240,10 +326,23 @@ class ConfigBuilderCommand
 
         if ($params->isOpenAIDetect()) {
             $detection = <<<PHP
-            OpenAIDetectEngine::new(
-                host: '$params->detectHost',
-                apiKey: '$params->detectApiKey',
-                model: '$params->detectModel',
+            ChatDetectEngine::new(
+                client: OpenAIClient::new(
+                    host: "$params->detectHost",
+                    apiKey: "$params->detectApiKey",
+                    model: "$params->detectModel",
+                ),
+            )
+            PHP;
+        }
+
+        if ($params->isOllamaDetect()) {
+            $detection = <<<PHP
+            ChatDetectEngine::new(
+                client: OllamaClient::new(
+                    host: "$params->detectHost",
+                    model: "$params->detectModel",
+                ),
             )
             PHP;
         }
@@ -251,8 +350,8 @@ class ConfigBuilderCommand
         if ($params->isLibreDetect()) {
             $detection = <<<PHP
             LibreTranslateEngine::new(
-                host: '$params->detectHost',
-                apiKey: '$params->detectApiKey',
+                host: "$params->detectHost",
+                apiKey: "$params->detectApiKey",
             )
             PHP;
         }

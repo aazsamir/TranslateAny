@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\System;
 
+use App\Engine\AvailableLanguage;
 use Tempest\Support\IsEnumHelper;
 
 enum Language: string
