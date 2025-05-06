@@ -10,11 +10,17 @@ class TranslateControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->post('/deeplx/translate', [
-            'text' => 'Hello world',
-            'target_lang' => 'PL',
-            'source_lang' => 'EN',
-        ]);
+        $response = $this->http->post(
+            '/deeplx/translate',
+            [
+                'text' => 'Hello world',
+                'target_lang' => 'PL',
+                'source_lang' => 'EN',
+            ],
+            headers: [
+                'Authorization' => 'Bearer test',
+            ],
+        );
 
         $response->assertOk();
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\DeepL\V2\Glossaries;
 
+use App\Api\DeepL\AuthMiddleware;
 use App\Middleware\LogMiddleware;
 use App\System\Glossary\Glossary;
 use App\System\Glossary\GlossaryRepository;
@@ -32,6 +33,7 @@ readonly class GlossariesController
         uri: '/deepl/v2/glossaries',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function post(GlossariesRequest $request): Response
@@ -66,6 +68,7 @@ readonly class GlossariesController
         uri: '/deepl/v2/glossaries',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function get(): Response
@@ -96,6 +99,7 @@ readonly class GlossariesController
         uri: '/deepl/v2/glossaries/{id}',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function getById(string $id): Response
@@ -123,6 +127,7 @@ readonly class GlossariesController
         uri: '/deepl/v2/glossaries/{id}',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function delete(string $id): Response

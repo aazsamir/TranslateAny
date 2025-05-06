@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Google\V2\Detect;
 
+use App\Api\Google\V2\AuthMiddleware;
 use App\Engine\DetectEngine;
 use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
@@ -21,6 +22,7 @@ readonly class DetectController
         uri: '/google/v2/language/translate/v2/detect',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(DetectRequest $request): Response

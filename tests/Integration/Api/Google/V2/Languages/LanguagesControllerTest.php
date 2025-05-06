@@ -10,7 +10,12 @@ class LanguagesControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->get('/google/v2/language/translate/v2/languages');
+        $response = $this->http->get(
+            '/google/v2/language/translate/v2/languages',
+            headers: [
+                'Authorization' => 'Bearer test',
+            ],
+        );
 
         $response->assertOk();
         $body = $response->body;

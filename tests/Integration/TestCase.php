@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use App\Auth\Authorizator;
+use App\Auth\SingleKeyAuthorizator;
 use App\Engine\DetectEngine;
 use App\Engine\DocumentTranslateEngine;
 use App\Engine\TranslateEngine;
 use App\System\Glossary\GlossaryRepository;
 use Tempest\Framework\Testing\IntegrationTest;
 use Tempest\Log\Logger;
-use Tests\Mock\DetectionEngineMock;
+use Tests\Mock\DetectEngineMock;
 use Tests\Mock\DocumentTranslateMock;
 use Tests\Mock\GlossaryRepositoryMock;
 use Tests\Mock\NullLogger;
@@ -25,7 +27,7 @@ abstract class TestCase extends IntegrationTest
         parent::setUp();
 
         $this->container->register(DetectEngine::class, function () {
-            return new DetectionEngineMock();
+            return new DetectEngineMock();
         });
         $this->container->register(TranslateEngine::class, function () {
             return new TranslateEngineMock();
@@ -38,6 +40,9 @@ abstract class TestCase extends IntegrationTest
         });
         $this->container->register(Logger::class, function () {
             return new NullLogger();
+        });
+        $this->container->register(Authorizator::class, function () {
+            return new SingleKeyAuthorizator('test');
         });
     }
 }

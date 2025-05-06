@@ -20,6 +20,9 @@ class GlossariesControllerTest extends TestCase
                 'entries' => 'test1,test2',
                 'entries_format' => 'csv',
             ],
+            headers: [
+                'Authorization' => 'DeepL-Auth-Key test',
+            ],
         );
 
         $response->assertStatus(Status::CREATED);
@@ -34,7 +37,12 @@ class GlossariesControllerTest extends TestCase
 
     public function testGet(): void
     {
-        $response = $this->http->get('/deepl/v2/glossaries');
+        $response = $this->http->get(
+            '/deepl/v2/glossaries',
+            headers: [
+                'Authorization' => 'DeepL-Auth-Key test',
+            ],
+        );
 
         $response->assertOk();
 
@@ -48,7 +56,12 @@ class GlossariesControllerTest extends TestCase
 
     public function testGetById(): void
     {
-        $response = $this->http->get('/deepl/v2/glossaries/1');
+        $response = $this->http->get(
+            '/deepl/v2/glossaries/1',
+            headers: [
+                'Authorization' => 'DeepL-Auth-Key test',
+            ],
+        );
 
         $response->assertOk();
 
@@ -62,13 +75,23 @@ class GlossariesControllerTest extends TestCase
 
     public function testDelete(): void
     {
-        $response = $this->http->delete('/deepl/v2/glossaries/1');
+        $response = $this->http->delete(
+            '/deepl/v2/glossaries/1',
+            headers: [
+                'Authorization' => 'DeepL-Auth-Key test',
+            ],
+        );
         $response->assertStatus(Status::NO_CONTENT);
     }
 
     public function testEntries(): void
     {
-        $response = $this->http->get('/deepl/v2/glossaries/1/entries');
+        $response = $this->http->get(
+            '/deepl/v2/glossaries/1/entries',
+            headers: [
+                'Authorization' => 'DeepL-Auth-Key test',
+            ],
+        );
 
         $response->assertOk();
 

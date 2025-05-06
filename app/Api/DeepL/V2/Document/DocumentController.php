@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\DeepL\V2\Document;
 
+use App\Api\DeepL\AuthMiddleware;
 use App\Engine\DocumentTranslateEngine;
 use App\Engine\DocumentTranslatePayload;
 use App\Middleware\LogMiddleware;
@@ -24,6 +25,7 @@ readonly class DocumentController
         uri: '/deepl/v2/document',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(DocumentRequest $request): Response

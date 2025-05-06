@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\LibreTranslate\Detect;
 
+use App\Api\LibreTranslate\AuthMiddleware;
 use App\Engine\DetectEngine;
 use App\Engine\Detection;
 use App\Middleware\LogMiddleware;
@@ -23,12 +24,14 @@ readonly class DetectController
         uri: '/libre/detect',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     #[Get(
         uri: '/libre/detect',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(DetectRequest $request): Response

@@ -10,6 +10,8 @@ use Tempest\Console\ConsoleCommand;
 
 class ConfigBuilderCommand
 {
+    private const DEFAULT_SAVE_PATH = __DIR__ . '/../../Config/app.config.php';
+
     public function __construct(
         private Console $console,
     ) {}
@@ -21,10 +23,11 @@ class ConfigBuilderCommand
         ],
         description: 'Create a configuration file.'
     )]
-    public function __invoke(): void
+    public function __invoke(string $path = self::DEFAULT_SAVE_PATH): void
     {
         $this->createConfigFile(
             $this->getUserParams(),
+            $path,
         );
     }
 
@@ -253,7 +256,7 @@ class ConfigBuilderCommand
         return $input;
     }
 
-    private function createConfigFile(UserParams $params): void
+    private function createConfigFile(UserParams $params, string $savePath): void
     {
         $configfile = <<<'PHP'
         <?php
@@ -371,7 +374,7 @@ class ConfigBuilderCommand
             $detection,
         );
 
-        $this->saveFile($configfile);
+        $this->saveFile($configfile, $savePath);
     }
 
     private function indent(string $string, int $level = 1): string
@@ -392,9 +395,8 @@ class ConfigBuilderCommand
         return implode("\n", $indented);
     }
 
-    private function saveFile(string $configfile): void
+    private function saveFile(string $configfile, string $path): void
     {
-        $path = __DIR__ . '/../../Config/app.config.php';
         file_put_contents($path, $configfile);
         $path = realpath($path);
         $this->console->info('Config file created at ' . $path);

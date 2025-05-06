@@ -149,6 +149,10 @@ return new AppConfig(
 );
 ```
 
+### Authorization
+
+For simple authorization just set `TRANSLATE_ANY_TOKEN` environment variable. If you don't want authorization at all, don't set it or leave it empty.
+
 # API
 
 TranslateAny exposes schema from different translation providers and differentates them by path prefix.
@@ -188,7 +192,7 @@ TranslateAny exposes schema from different translation providers and differentat
 - ✅ LibreTranslate API
 - ✅ Language Detection
 - ❌ Rephrasing
-- ❌ API authorization
+- ✅ API authorization
 - ❌ Document Translation
 - ⚠️ HTML Playground to test integration
     > **_NOTE:_** This is a work in progress, and not all features are possible to test. Basic translation is available.

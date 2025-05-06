@@ -10,10 +10,16 @@ class TranslateControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->post('/google/v2/language/translate/v2', [
-            'q' => 'Hello world!',
-            'target' => 'pl',
-        ]);
+        $response = $this->http->post(
+            '/google/v2/language/translate/v2',
+            [
+                'q' => 'Hello world!',
+                'target' => 'pl',
+            ],
+            headers: [
+                'Authorization' => 'Bearer test',
+            ],
+        );
 
         $response->assertOk();
         $body = $response->body;

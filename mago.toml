@@ -136,3 +136,13 @@ level = "off"
 [[linter.rules]]
 name = "comment/no-untagged-todo"
 level = "off"
+
+# this one complains about token === token
+[[linter.rules]]
+name = "security/no-insecure-comparison"
+level = "off"
+
+# this one complains about `api_key` in tests
+[[linter.rules]]
+name = "security/no-literal-password"
+level = "off"

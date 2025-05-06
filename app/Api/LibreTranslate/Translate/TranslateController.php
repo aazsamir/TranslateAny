@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\LibreTranslate\Translate;
 
+use App\Api\LibreTranslate\AuthMiddleware;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Middleware\LogMiddleware;
@@ -24,12 +25,14 @@ readonly class TranslateController
         uri: '/libre/translate',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     #[Get(
         uri: '/libre/translate',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(TranslateRequest $request): Response

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\DeepLX\Translate;
 
+use App\Api\DeepLX\AuthMiddleware;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Middleware\LogMiddleware;
@@ -23,12 +24,14 @@ readonly class TranslateController
         uri: '/deeplx/translate',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     #[Post(
         uri: '/deeplx/v1/translate',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(TranslateRequest $request): Response

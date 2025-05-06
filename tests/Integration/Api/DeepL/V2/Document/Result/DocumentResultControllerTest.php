@@ -10,7 +10,9 @@ class DocumentResultControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->post('/deepl/v2/document/123/result');
+        $response = $this->http->post('/deepl/v2/document/123/result', headers: [
+            'Authorization' => 'DeepL-Auth-Key test',
+        ]);
 
         $response->assertOk();
     }

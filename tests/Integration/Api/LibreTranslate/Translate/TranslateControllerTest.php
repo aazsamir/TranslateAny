@@ -14,6 +14,7 @@ class TranslateControllerTest extends TestCase
             'q' => 'Hello world!',
             'source' => 'auto',
             'target' => 'pl',
+            'api_key' => 'test',
         ]);
 
         $response->assertOk();

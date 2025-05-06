@@ -10,7 +10,9 @@ class GlossaryLanguagePairsControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->get('/deepl/v2/glossary-language-pairs');
+        $response = $this->http->get('/deepl/v2/glossary-language-pairs', headers: [
+            'Authorization' => 'DeepL-Auth-Key test',
+        ]);
 
         $response->assertOk();
         $this->assertEquals(

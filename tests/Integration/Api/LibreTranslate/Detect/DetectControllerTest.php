@@ -10,9 +10,13 @@ class DetectControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->post('/libre/detect', [
-            'q' => 'Hello world!',
-        ]);
+        $response = $this->http->post(
+            '/libre/detect',
+            [
+                'q' => 'Hello world!',
+                'api_key' => 'test',
+            ],
+        );
 
         $response->assertOk();
         $body = $response->body;

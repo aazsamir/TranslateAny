@@ -11,7 +11,7 @@ use App\System\Language;
 /**
  * @internal
  */
-class DetectionEngineMock implements DetectEngine
+class DetectEngineMock implements DetectEngine
 {
     public array $detections = [];
 

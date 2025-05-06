@@ -21,6 +21,9 @@ class DocumentControllerTest extends TestCase
                     'target_lang' => 'EN',
                     'source_lang' => 'PL',
                 ],
+                headers: [
+                    'Authorization' => 'DeepL-Auth-Key test',
+                ],
                 files: [
                     'file' => new UploadedFile(
                         streamOrFile: \realpath(__DIR__ . '/../../../../../Mock/file'),

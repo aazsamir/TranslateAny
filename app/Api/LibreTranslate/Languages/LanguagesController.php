@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\LibreTranslate\Languages;
 
+use App\Api\LibreTranslate\AuthMiddleware;
 use App\Engine\AvailableLanguage;
 use App\Engine\TranslateEngine;
 use App\Middleware\LogMiddleware;
@@ -23,6 +24,7 @@ readonly class LanguagesController
         uri: '/libre/languages',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(): Response

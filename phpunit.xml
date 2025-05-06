@@ -31,6 +31,7 @@
     </include>
     <exclude>
       <directory suffix=".view.php">./app/Front</directory>
+      <directory suffix=".config.php">./app/Config</directory>
     </exclude>
   </source>
 </phpunit>

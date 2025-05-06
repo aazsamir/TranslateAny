@@ -34,10 +34,6 @@ class LibreTranslateEngineTest extends TestCase
                 'alternatives' => [
                     'Hello world!',
                 ],
-                'detectedLanguage' => [
-                    'language' => 'en',
-                    'confidence' => 0.5,
-                ],
             ],
         );
 
@@ -45,8 +41,56 @@ class LibreTranslateEngineTest extends TestCase
 
         $this->assertEquals('Hello world!', $translation->text);
         $this->assertEquals(['Hello world!'], $translation->alternatives);
+        $this->assertNull($translation->detectedLanguage);
+
+        $this->assertEquals(
+            [
+                'q' => 'Hello world!',
+                'target' => 'pl',
+                'source' => 'en',
+            ],
+            $this->psrClient->getArrayBody(),
+        );
+    }
+
+    public function testTranslateSourceAuto(): void
+    {
+        $this->psrClient->setResponse(
+            [
+                'translatedText' => 'Hello world!',
+                'alternatives' => [
+                    'Hello world!',
+                ],
+                'detectedLanguage' => [
+                    'language' => 'en',
+                    'confidence' => 0.5,
+                ],
+            ],
+        );
+
+        $translation = $this->engine->translate(
+            TranslatePayloadFixture::get(
+                sourceLanguage: null,
+                format: 'html',
+                alternatives: 10,
+            ),
+        );
+
+        $this->assertEquals('Hello world!', $translation->text);
+        $this->assertEquals(['Hello world!'], $translation->alternatives);
         $this->assertEquals(Language::en, $translation->detectedLanguage->language);
         $this->assertEquals(0.5, $translation->detectedLanguage->confidence);
+
+        $this->assertEquals(
+            [
+                'q' => 'Hello world!',
+                'target' => 'pl',
+                'source' => 'auto',
+                'format' => 'html',
+                'alternatives' => 10,
+            ],
+            $this->psrClient->getArrayBody(),
+        );
     }
 
     public function testDetection(): void
@@ -65,6 +109,13 @@ class LibreTranslateEngineTest extends TestCase
         $this->assertCount(1, $detections);
         $this->assertEquals(Language::en, $detections[0]->language);
         $this->assertEquals(0.5, $detections[0]->confidence);
+
+        $this->assertEquals(
+            [
+                'q' => 'Hello world!',
+            ],
+            $this->psrClient->getArrayBody(),
+        );
     }
 
     public function testLanguages(): void

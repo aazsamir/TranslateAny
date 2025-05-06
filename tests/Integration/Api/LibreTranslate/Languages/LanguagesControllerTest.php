@@ -10,7 +10,7 @@ class LanguagesControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->get('/libre/languages');
+        $response = $this->http->get('/libre/languages?api_key=test');
 
         $response->assertOk();
         $body = $response->body;

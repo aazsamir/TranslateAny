@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Google\V2\Translate;
 
+use App\Api\Google\V2\AuthMiddleware;
 use App\Engine\TranslateEngine;
 use App\Engine\TranslatePayload;
 use App\Middleware\LogMiddleware;
@@ -23,6 +24,7 @@ readonly class TranslateController
         uri: '/google/v2/language/translate/v2',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(TranslateRequest $request): Response

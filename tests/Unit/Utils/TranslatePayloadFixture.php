@@ -9,12 +9,21 @@ use App\System\Language;
 
 class TranslatePayloadFixture
 {
-    public static function get(): TranslatePayload
-    {
+    public static function get(
+        string $text = 'Hello world!',
+        Language $targetLanguage = Language::pl,
+        ?Language $sourceLanguage = Language::en,
+        ?string $format = null,
+        ?int $alternatives = null,
+        ?string $glossaryId = null,
+    ): TranslatePayload {
         return new TranslatePayload(
-            text: 'Hello world!',
-            targetLanguage: Language::pl,
-            sourceLanguage: Language::en,
+            text: $text,
+            targetLanguage: $targetLanguage,
+            sourceLanguage: $sourceLanguage,
+            format: $format,
+            alternatives: $alternatives,
+            glossaryId: $glossaryId,
         );
     }
 }

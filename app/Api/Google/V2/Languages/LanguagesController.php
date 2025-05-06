@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Google\V2\Languages;
 
+use App\Api\Google\V2\AuthMiddleware;
 use App\Engine\TranslateEngine;
 use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
@@ -21,6 +22,7 @@ readonly class LanguagesController
         uri: '/google/v2/language/translate/v2/languages',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(): Response

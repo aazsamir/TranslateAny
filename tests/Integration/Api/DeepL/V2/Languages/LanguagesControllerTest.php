@@ -10,7 +10,9 @@ class LanguagesControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->get('/deepl/v2/languages');
+        $response = $this->http->get('/deepl/v2/languages', headers: [
+            'Authorization' => 'DeepL-Auth-Key test',
+        ]);
 
         $response->assertOk();
         $body = $response->body;

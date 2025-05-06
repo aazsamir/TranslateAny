@@ -12,9 +12,12 @@ use Psr\Http\Message\ResponseInterface;
 class PsrClientMock implements ClientInterface
 {
     public ?ResponseInterface $response = null;
+    public ?RequestInterface $gotRequest = null;
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
+        $this->gotRequest = $request;
+
         if ($this->response !== null) {
             return $this->response;
         }
@@ -31,6 +34,14 @@ class PsrClientMock implements ClientInterface
         $this->response = new Response(
             status: $status,
             body: json_encode($body),
+        );
+    }
+
+    public function getArrayBody(): array
+    {
+        return json_decode(
+            $this->gotRequest->getBody()->getContents(),
+            true,
         );
     }
 }

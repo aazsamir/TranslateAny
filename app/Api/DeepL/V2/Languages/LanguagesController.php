@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\DeepL\V2\Languages;
 
+use App\Api\DeepL\AuthMiddleware;
 use App\Engine\TranslateEngine;
 use App\Middleware\LogMiddleware;
 use Tempest\Http\Response;
@@ -21,6 +22,7 @@ readonly class LanguagesController
         uri: '/deepl/v2/languages',
         middleware: [
             LogMiddleware::class,
+            AuthMiddleware::class,
         ],
     )]
     public function __invoke(): Response

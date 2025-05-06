@@ -10,9 +10,15 @@ class DetectControllerTest extends TestCase
 {
     public function test(): void
     {
-        $response = $this->http->post('/google/v2/language/translate/v2/detect', [
-            'q' => 'Hello world!',
-        ]);
+        $response = $this->http->post(
+            '/google/v2/language/translate/v2/detect',
+            [
+                'q' => 'Hello world!',
+            ],
+            headers: [
+                'Authorization' => 'Bearer test',
+            ],
+        );
 
         $response->assertOk();
         $body = $response->body;

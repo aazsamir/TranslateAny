@@ -10,7 +10,7 @@ use App\System\AppConfig;
 use Tempest\Container\Container;
 use Tempest\Container\Initializer;
 
-class DetectionInitializer implements Initializer
+class DetectInitializer implements Initializer
 {
     public function __construct(
         private AppConfig $appConfig,
