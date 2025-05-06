@@ -23,6 +23,17 @@ composer install
 
 Now, on `http://localhost:8000` you can test your configuration in playground.
 
+Or use `translate` command to test your configuration.
+
+Using shell
+```shell
+./tempest translate --text="Hello world" --target="pl"
+```
+Using docker compose:
+```shell
+docker compose run --rm translateany php tempest translate --text="Hello world" --target="pl"
+```
+
 ![View](./docs/page.png)
 
 # Configuration

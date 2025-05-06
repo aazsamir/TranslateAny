@@ -6,8 +6,8 @@ namespace Tests\Unit\Engine\OpenAI;
 
 use App\Engine\Chat\ChatDetectEngine;
 use App\System\Language;
+use App\System\Logger\MemoryLogger;
 use Tests\Mock\ChatClientMock;
-use Tests\Mock\NullLogger;
 use Tests\TestCase;
 
 class ChatDetectEngineTest extends TestCase
@@ -21,7 +21,7 @@ class ChatDetectEngineTest extends TestCase
         $this->engine = new ChatDetectEngine(
             client: $this->client,
             systemPrompt: 'test',
-            logger: new NullLogger(),
+            logger: new MemoryLogger(),
         );
     }
 

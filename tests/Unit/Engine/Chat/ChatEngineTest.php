@@ -6,9 +6,9 @@ namespace Tests\Unit\Engine\Chat;
 
 use App\Engine\AvailableLanguage;
 use App\Engine\Chat\ChatEngine;
+use App\System\Logger\MemoryLogger;
 use Tests\Mock\ChatClientMock;
 use Tests\Mock\GlossaryRepositoryMock;
-use Tests\Mock\NullLogger;
 use Tests\TestCase;
 use Tests\Unit\Utils\TranslatePayloadFixture;
 
@@ -26,7 +26,7 @@ class ChatEngineTest extends TestCase
             client: $this->client,
             systemPrompt: 'system',
             glossaryPrompt: 'glossary',
-            logger: new NullLogger(),
+            logger: new MemoryLogger(),
             glossaryRepository: $this->glossaryRepository,
         );
     }

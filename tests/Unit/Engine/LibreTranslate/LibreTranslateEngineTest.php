@@ -6,7 +6,7 @@ namespace Tests\Unit\Engine\LibreTranslate;
 
 use App\Engine\LibreTranslate\LibreTranslateEngine;
 use App\System\Language;
-use Tests\Mock\NullLogger;
+use App\System\Logger\MemoryLogger;
 use Tests\Mock\PsrClientMock;
 use Tests\TestCase;
 use Tests\Unit\Utils\TranslatePayloadFixture;
@@ -22,7 +22,7 @@ class LibreTranslateEngineTest extends TestCase
         $this->engine = new LibreTranslateEngine(
             host: '',
             client: $this->psrClient,
-            logger: new NullLogger(),
+            logger: new MemoryLogger(),
         );
     }
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Unit\Engine\Cache;
 
 use App\Engine\Cache\CacheEngine;
+use App\System\Logger\MemoryLogger;
 use Tempest\Cache\Cache;
 use Tests\Mock\CacheMock;
-use Tests\Mock\NullLogger;
 use Tests\Mock\TranslateEngineMock;
 use Tests\TestCase;
 use Tests\Unit\Utils\TranslatePayloadFixture;
@@ -20,7 +20,7 @@ class CacheEngineTest extends TestCase
     protected function setUp(): void
     {
         $this->cache = new CacheMock();
-        $this->engine = new CacheEngine($this->cache, new TranslateEngineMock(), new NullLogger());
+        $this->engine = new CacheEngine($this->cache, new TranslateEngineMock(), new MemoryLogger());
     }
 
     public function testTranslateWithoutCache(): void

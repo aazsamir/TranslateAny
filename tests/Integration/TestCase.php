@@ -10,12 +10,12 @@ use App\Engine\DetectEngine;
 use App\Engine\DocumentTranslateEngine;
 use App\Engine\TranslateEngine;
 use App\System\Glossary\GlossaryRepository;
+use App\System\Logger\MemoryLogger;
 use Tempest\Framework\Testing\IntegrationTest;
 use Tempest\Log\Logger;
 use Tests\Mock\DetectEngineMock;
 use Tests\Mock\DocumentTranslateMock;
 use Tests\Mock\GlossaryRepositoryMock;
-use Tests\Mock\NullLogger;
 use Tests\Mock\TranslateEngineMock;
 
 abstract class TestCase extends IntegrationTest
@@ -39,7 +39,7 @@ abstract class TestCase extends IntegrationTest
             return new GlossaryRepositoryMock();
         });
         $this->container->register(Logger::class, function () {
-            return new NullLogger();
+            return new MemoryLogger();
         });
         $this->container->register(Authorizator::class, function () {
             return new SingleKeyAuthorizator('test');

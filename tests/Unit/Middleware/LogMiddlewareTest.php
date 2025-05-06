@@ -6,10 +6,10 @@ namespace Tests\Unit\Middleware;
 
 use App\Middleware\LogMiddleware;
 use App\System\AppConfig;
+use App\System\Logger\MemoryLogger;
 use Tempest\Http\GenericRequest;
 use Tempest\Http\Method;
 use Tests\Mock\HttpMiddlewareCallableMock;
-use Tests\Mock\NullLogger;
 use Tests\TestCase;
 
 class LogMiddlewareTest extends TestCase
@@ -19,7 +19,7 @@ class LogMiddlewareTest extends TestCase
         $config = new AppConfig(
             debug: false,
         );
-        $logger = new NullLogger();
+        $logger = new MemoryLogger();
         $middleware = new LogMiddleware(
             logger: $logger,
             appConfig: $config,
@@ -41,7 +41,7 @@ class LogMiddlewareTest extends TestCase
         $config = new AppConfig(
             debug: true,
         );
-        $logger = new NullLogger();
+        $logger = new MemoryLogger();
         $middleware = new LogMiddleware(
             logger: $logger,
             appConfig: $config,

@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Tests\Mock;
+namespace App\System\Logger;
 
 use Stringable;
 use Tempest\Log\Logger;
 
-class NullLogger implements Logger
+class MemoryLogger implements Logger
 {
     /**
      * @var array{
-     *  emergency: array{message: string|Stringable, context: mixed[]},
-     *  alert: array{message: string|Stringable, context: mixed[]},
-     *  critical: array{message: string|Stringable, context: mixed[]},
-     *  error: array{message: string|Stringable, context: mixed[]},
-     *  warning: array{message: string|Stringable, context: mixed[]},
-     *  notice: array{message: string|Stringable, context: mixed[]},
-     *  info: array{message: string|Stringable, context: mixed[]},
-     *  debug: array{message: string|Stringable, context: mixed[]},
+     *  emergency: array{message: string|Stringable, context: mixed[]}[],
+     *  alert: array{message: string|Stringable, context: mixed[]}[],
+     *  critical: array{message: string|Stringable, context: mixed[]}[],
+     *  error: array{message: string|Stringable, context: mixed[]}[],
+     *  warning: array{message: string|Stringable, context: mixed[]}[],
+     *  notice: array{message: string|Stringable, context: mixed[]}[],
+     *  info: array{message: string|Stringable, context: mixed[]}[],
+     *  debug: array{message: string|Stringable, context: mixed[]}[],
      * }
      */
     public array $logs = [
@@ -98,6 +98,10 @@ class NullLogger implements Logger
 
     public function log($level, string|Stringable $message, array $context = []): void
     {
+        if (! isset($this->logs[$level])) {
+            return;
+        }
+
         $this->logs[$level][] = [
             'message' => $message,
             'context' => $context,
@@ -106,8 +110,8 @@ class NullLogger implements Logger
 
     public function empty(): bool
     {
-        foreach ($this->logs as $log) {
-            if (count($log) > 0) {
+        foreach ($this->logs as $logs) {
+            if (count($logs) > 0) {
                 return false;
             }
         }

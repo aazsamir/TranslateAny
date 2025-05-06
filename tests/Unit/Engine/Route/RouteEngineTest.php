@@ -11,7 +11,7 @@ use App\Engine\Route\TranslateRoute;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
 use App\System\Language;
-use Tests\Mock\NullLogger;
+use App\System\Logger\MemoryLogger;
 use Tests\Mock\TranslateEngineMock;
 use Tests\TestCase;
 
@@ -40,7 +40,7 @@ class RouteEngineTest extends TestCase
                     ),
                 ),
             ],
-            logger: new NullLogger(),
+            logger: new MemoryLogger(),
         );
     }
 
@@ -75,7 +75,7 @@ class RouteEngineTest extends TestCase
             targetLanguage: Language::fr,
         );
 
-        $engine = new RouteEngine([], new NullLogger());
+        $engine = new RouteEngine([], new MemoryLogger());
 
         $this->expectException(\RuntimeException::class);
 
