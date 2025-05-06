@@ -30,6 +30,6 @@ class TextExtractorTest extends TestCase
             ),
         );
 
-        $this->assertEquals(['test content'], $text);
+        $this->assertEquals(['test content'], \iterator_to_array($text));
     }
 }
