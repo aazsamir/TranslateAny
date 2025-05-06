@@ -52,13 +52,18 @@
     <body data-bs-theme="dark">
         <div class="container-fluid full-height-container">
             <div class="row">
-                <div class="col-12 text-center my-3">
+                <div class="col-12 text-center my-3 d-flex justify-content-between px-3">
                     <h1>TranslateAny</h1>
-                    <button class="btn btn-secondary" id="theme-toggle" style="position: absolute; right: 20px; top: 20px;">Theme</button>
+                    <div>
+                        <a href="/" class="btn btn-primary mx-2">Home</a>
+                        <a href="/glossaries" class="btn btn-primary mx-2">Glossaries</a>
+                        <button class="btn btn-secondary mx-2" id="theme-toggle">Theme</button>
+                    </div>
                 </div>
             </div>
             <x-slot />
         </div>
+        <footer class="my-2"></footer>
     </body>
 
     <script>

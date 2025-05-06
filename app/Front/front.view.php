@@ -13,7 +13,7 @@
                     <option value="{{ $language->lower() }}">{{ $language->value }}</option>
                 </x-template>
             </select>
-            <button id="translate" class="btn btn-primary btn-lg w-100">Translate</button>
+            <button id="translate" class="btn btn-primary btn-lg w-100 mx-3">Translate</button>
             <select id="target" class="form-select form-select-lg w-25" aria-label="Target Language">
                 <x-template :foreach="App\System\Language::alphabetically() as $language">
                     <option value="{{ $language->lower() }}">{{ $language->value }}</option>

@@ -68,11 +68,11 @@
                     glossaryDiv.className = 'glossary-item card';
                     glossaryDiv.innerHTML = `
                     <h5>${glossary.name}</h5>
-                    <p>Source Language: ${glossary.source_lang}</p>
-                    <p>Target Language: ${glossary.target_lang}</p>
+                    <p class="source-lang">Source Language: ${glossary.source_lang}</p>
+                    <p class="target-lang">Target Language: ${glossary.target_lang}</p>
                     <p>Entry Count: ${glossary.entry_count}</p>
-                    <button class="btn btn-primary" onclick="downloadGlossary('${glossary.glossary_id}')">Download</button>
-                    <button class="btn btn-danger" onclick="deleteGlossary('${glossary.glossary_id}')">Delete</button>
+                    <button class="btn btn-primary m-1" onclick="downloadGlossary('${glossary.glossary_id}')">Download</button>
+                    <button class="btn btn-danger m-1" onclick="deleteGlossary('${glossary.glossary_id}')">Delete</button>
                 `;
                     glossariesContainer.appendChild(glossaryDiv);
                 });
@@ -106,6 +106,13 @@
                     .then(data => {
                         const textarea = document.querySelector('textarea[name="entries"]');
                         textarea.value = data.replace(/\t/g, ',');
+                        const glossary = glossaries.find(g => g.glossary_id === glossaryId);
+
+                        if (glossary) {
+                            document.querySelector('select[name="source_lang"]').value = glossary.source_lang;
+                            document.querySelector('select[name="target_lang"]').value = glossary.target_lang;
+                            document.querySelector('input[name="name"]').value = glossary.name;
+                        }
                     })
                     .catch(error => console.error('Error downloading glossary:', error));
             }
