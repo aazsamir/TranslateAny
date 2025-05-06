@@ -7,14 +7,20 @@
     </div>
     <div class="row mt-2">
         <div class="col d-flex justify-content-around">
-            <select id="source" class="form-select form-select-lg w-25" aria-label="Source Language">
+            <select id="source" class="form-select form-select-lg w-25 mx-1" aria-label="Source Language">
                 <option value="auto">auto</option>
                 <x-template :foreach="App\System\Language::alphabetically() as $language">
                     <option value="{{ $language->lower() }}">{{ $language->value }}</option>
                 </x-template>
             </select>
-            <button id="translate" class="btn btn-primary btn-lg w-100 mx-3">Translate</button>
-            <select id="target" class="form-select form-select-lg w-25" aria-label="Target Language">
+            <button id="detect" class="btn btn-secondary btn-lg mx-1">
+                Detect
+            </button>
+            <button id="swap" class="btn btn-secondary btn-lg mx-1">
+                &#8646;
+            </button>
+            <button id="translate" class="btn btn-primary btn-lg w-100 mx-1">Translate</button>
+            <select id="target" class="form-select form-select-lg w-25 mx-1" aria-label="Target Language">
                 <x-template :foreach="App\System\Language::alphabetically() as $language">
                     <option value="{{ $language->lower() }}">{{ $language->value }}</option>
                 </x-template>
@@ -29,22 +35,25 @@
             const translateButton = document.getElementById('translate');
             const sourceSelect = document.getElementById('source');
             const targetSelect = document.getElementById('target');
+            const swapButton = document.getElementById('swap');
+            const detectButton = document.getElementById('detect');
 
-            init();
             translateButton.addEventListener('click', translate);
             input.addEventListener('input', saveText);
             output.addEventListener('input', saveText);
             sourceSelect.addEventListener('change', saveLanguages);
             targetSelect.addEventListener('change', saveLanguages);
+            swapButton.addEventListener('click', swapLanguages);
+            detectButton.addEventListener('click', detect);
+
+            init();
 
             function translate() {
-                const inputText = input.value;
+                const inputText = input.value.trim();
                 const sourceLang = sourceSelect.value;
                 const targetLang = targetSelect.value;
 
-                if (inputText.trim() === '') {
-                    alert('Please enter text to translate.');
-
+                if (inputText === '') {
                     return;
                 }
 
@@ -124,6 +133,60 @@
 
                 localStorage.setItem('sourceLang', sourceLang);
                 localStorage.setItem('targetLang', targetLang);
+            }
+
+            function swapLanguages() {
+                const sourceLang = sourceSelect.value;
+
+                if (sourceLang === 'auto') {
+                    detect().then(() => {
+                        doSwap();
+                    });
+                } else {
+                    doSwap();
+                }
+            }
+
+            function doSwap() {
+                const sourceLang = sourceSelect.value;
+                const targetLang = targetSelect.value;
+                sourceSelect.value = targetLang;
+                targetSelect.value = sourceLang;
+
+                const tempText = input.value;
+                input.value = output.value;
+                output.value = tempText;
+
+                saveLanguages();
+            }
+
+            function detect() {
+                const inputText = input.value.trim();
+                detectButton.disabled = true;
+
+                if (inputText === '') {
+                    return;
+                }
+
+                return fetch('/libre/detect', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            q: inputText
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data[0]) {
+                            sourceSelect.value = data[0].language;
+
+                            saveLanguages();
+                        }
+                    }).finally(() => {
+                        detectButton.disabled = false;
+                    });
             }
         </script>
     </x-slot>
