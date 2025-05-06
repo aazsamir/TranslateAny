@@ -7,3 +7,4 @@ vendor/
 .idea
 .phpunit.result.cache
 tests-coverage
+log
