@@ -154,34 +154,28 @@ return new AppConfig(
 TranslateAny exposes schema from different translation providers and differentates them by path prefix.
 > **_NOTE:_** Not all endpoints are exposed right now, for example: document translation isn't handled.
 
-## Google Translate V2
-- `POST /google/v2/language/translate/v2`
-- `POST /google/v2/language/translate/v2/detect`
-- `GET /google/v2/language/translate/v2/languages`
-
-## DeepL
-- `POST /deepl/v2/translate`
-- `GET /deepl/v2/languages`
-- `POST /deepl/v2/glossary-language-pairs`
-- `POST /deepl/v2/glossaries`
-- `GET /deepl/v2/glossaries`
-- `GET /deepl/v2/glossaries/{glossary_id}`
-- `GET /deepl/v2/glossaries/{glossary_id}/entries`
-- `DELETE /deepl/v2/glossaries/{glossary_id}`
-
-## DeepLX
-- `POST /deeplx/translate`
-- `POST /deeplx/v1/translate`
-
-## LibreTranslate
-- `POST /libre/detect`
-- `POST /libre/translate`
-- `GET /libre/languages`
+|Engine|Method|Original|TranslateAny|
+|---|---|---|---|
+|**Google Translate V2**|**POST**|**`/language/translate/v2`**|**`/google/v2/language/translate/v2`**|
+|Google Translate V2|POST|`/language/translate/v2/detect`|`/google/v2/language/translate/v2/detect`|
+|Google Translate V2|GET|`/language/translate/v2/languages`|`/google/v2/language/translate/v2/languages`|
+|**DeepL**|**POST**|**`/v2/translate`**|**`/deepl/v2/translate`**|
+|DeepL|GET|`/v2/languages`|`/deepl/v2/languages`|
+|DeepL|GET|`/v2/glossary-language-pairs`|`/deepl/v2/glossary-language-pairs`|
+|DeepL|POST|`/v2/glossaries`|`/deepl/v2/glossaries`|
+|DeepL|GET|`/v2/glossaries/{glossary_id}`|`/deepl/v2/glossaries/{glossary_id}`|
+|DeepL|GET|`/v2/glossaries/{glossary_id}/entries`|`/deepl/v2/glossaries/{glossary_id}/entries`|
+|DeepL|DELETE|`/v2/glossaries/{glossary_id}`|`/deepl/v2/glossaries/{glossary_id}`|
+|**DeepLX**|**POST**|**`/translate`**|**`/deeplx/translate`**|
+|**DeepLX**|**POST**|**`/v1/translate`**|**`/deeplx/v1/translate`**|
+|**LibreTranslate**|**POST**|**`/translate`**|**`/libre/translate`**|
+|LibreTranslate|POST|`/detect`|`/libre/detect`|
+|LibreTranslate|GET|`/languages`|`/libre/languages`|
 
 # Features
 - ✅ OpenAI Compatible API Translation Engine
 - ✅ LibreTranslate Translation Engine
-- ❌ Native Ollama Translation Engine
+- ✅ Native Ollama Translation Engine
 - ❌ Native Llama.cpp Translation Engine
 - ❌ Native vLLM Translation Engine
 - ❌ Google Translate Translation Engine
