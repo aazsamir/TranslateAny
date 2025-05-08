@@ -7,6 +7,8 @@ namespace App\Engine\Chat;
 use App\Engine\DocumentTranslateEngine;
 use App\Engine\DocumentTranslatePayload;
 use App\Engine\DocumentTranslation;
+use App\System\Chat\TextTrimmer;
+use App\System\Document\Chunking\ChunkingStrategyFactory;
 use App\System\Document\DocumentStorage;
 use App\System\Document\TextExtractor;
 use App\System\Logger\PrefixLogger;
@@ -24,6 +26,7 @@ readonly class ChatDocumentTranslateEngine implements DocumentTranslateEngine
         private TextExtractor $textExtractor,
         private DocumentStorage $documentStorage,
         private Logger $logger,
+        private ChunkingStrategyFactory $chunkingStrategyFactory,
         private string $systemPrompt,
     ) {
     }
@@ -40,6 +43,7 @@ readonly class ChatDocumentTranslateEngine implements DocumentTranslateEngine
                 textExtractor: new TextExtractor(),
                 documentStorage: new DocumentStorage(),
                 logger: get(Logger::class),
+                chunkingStrategyFactory: get(ChunkingStrategyFactory::class),
             );
         });
 
@@ -61,15 +65,17 @@ readonly class ChatDocumentTranslateEngine implements DocumentTranslateEngine
         $translated = [];
         $lastUserMessage = null;
         $lastAssistantMessage = null;
+        $chunkingStrategy = $this->chunkingStrategyFactory->create();
 
-        foreach ($pages as $i => $page) {
+        foreach ($chunkingStrategy->chunk($pages) as $i => $chunk) {
             $this->logger->debug(
                 $this->prefixLog(
                     'ChatDocumentTranslate',
                     'translate',
                 ),
                 [
-                    'page' => $i,
+                    'chunk' => $i,
+                    'page' => $chunk->page
                 ],
             );
             $messages = [];
@@ -82,18 +88,18 @@ readonly class ChatDocumentTranslateEngine implements DocumentTranslateEngine
 
             $message = new ChatMessage(
                 role: 'user',
-                content: 'Translate to ' . $payload->targetLanguage->value . " language:\n" . $page,
+                content: 'Translate to ' . $payload->targetLanguage->value . " language:\n" . $chunk->text,
             );
             $messages[] = $message;
             $lastUserMessage = $message;
 
             $response = $this->client->chat($messages);
-            $translated[] = $response;
 
             $lastAssistantMessage = new ChatMessage(
                 role: 'assistant',
                 content: $response,
             );
+            $translated[] = TextTrimmer::trim($response);
         }
 
         $fileid = $this->documentStorage->storeTranslated($translated);

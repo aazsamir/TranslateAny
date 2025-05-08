@@ -8,6 +8,7 @@ use Laminas\Diactoros\UploadedFile;
 use Tempest\Http\GenericRequest;
 use Tempest\Http\Method;
 use Tests\Integration\TestCase;
+use Tests\Mock\UploadMock;
 
 class DocumentControllerTest extends TestCase
 {
@@ -25,12 +26,7 @@ class DocumentControllerTest extends TestCase
                     'Authorization' => 'DeepL-Auth-Key test',
                 ],
                 files: [
-                    'file' => new UploadedFile(
-                        streamOrFile: \realpath(__DIR__ . '/../../../../../Mock/file'),
-                        size: null,
-                        clientFilename: 'upload',
-                        errorStatus: 0,
-                    ),
+                    'file' => UploadMock::uploadedFile(),
                 ],
             ),
         );
