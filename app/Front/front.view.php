@@ -1,5 +1,15 @@
 <x-base>
-    <div class="row flex-grow-1" style="height:100%;">
+    <div class="row">
+        <div class="col">
+            <select id="schema" class="form-select form-select-lg">
+                <option value="libre">LibreTranslate</option>
+                <option value="googlev2">Google Translate v2</option>
+                <option value="deepl">DeepL</option>
+                <option value="deeplx">DeepLX</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mt-2 flex-grow-1" style="height:100%;">
         <div class="col-12 textarea-row">
             <textarea id="input" class="form-control-lg w-100"></textarea>
             <textarea id="output" class="form-control-lg w-100" readonly></textarea>
@@ -37,6 +47,9 @@
             const targetSelect = document.getElementById('target');
             const swapButton = document.getElementById('swap');
             const detectButton = document.getElementById('detect');
+            const schemaSelect = document.getElementById('schema');
+
+            var schema = 'libre';
 
             translateButton.addEventListener('click', translate);
             input.addEventListener('input', saveText);
@@ -45,6 +58,7 @@
             targetSelect.addEventListener('change', saveLanguages);
             swapButton.addEventListener('click', swapLanguages);
             detectButton.addEventListener('click', detect);
+            schemaSelect.addEventListener('change', changeSchema);
 
             init();
 
@@ -60,7 +74,38 @@
                 translateButton.disabled = true;
                 output.value = 'Translating...';
 
-                fetch('/libre/translate', {
+                if (schema === 'libre') {
+                    translation = translateLibre(inputText, sourceLang, targetLang);
+                } else if (schema === 'googlev2') {
+                    translation = translateGoogle(inputText, sourceLang, targetLang);
+                } else if (schema === 'deepl') {
+                    translation = translateDeepl(inputText, sourceLang, targetLang);
+                } else if (schema === 'deeplx') {
+                    translation = translateDeeplx(inputText, sourceLang, targetLang);
+                } else {
+                    console.error('Unknown translation schema:', schema);
+                    output.value = 'Unknown translation schema: ' + schema;
+                    translateButton.disabled = false;
+
+                    return;
+                }
+
+                translation
+                    .then(translatedText => {
+                        output.value = translatedText;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        output.value = 'Translation failed: ' + error.message;
+                    })
+                    .finally(() => {
+                        translateButton.disabled = false;
+                        saveText();
+                    });
+            }
+
+            function translateLibre(inputText, sourceLang, targetLang) {
+                return fetch('/libre/translate', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -74,23 +119,92 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
-                            output.value = 'Error: ' + data.error;
-                        } else {
-                            output.value = data.translatedText;
+                            throw new Error(data.error);
                         }
+                        return data.translatedText;
                     })
                     .catch(error => {
-                        output.value = 'Error: ' + error.message;
+                        throw new Error('Translation failed: ' + error.message);
+                    });
+            }
+
+            function translateGoogle(input, sourceLang, targetLang) {
+                return fetch('/google/v2/language/translate/v2', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            q: input,
+                            source: sourceLang,
+                            target: targetLang
+                        })
                     })
-                    .finally(() => {
-                        translateButton.disabled = false;
-                        saveText();
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.error);
+                        }
+
+                        return data.data.translations[0].translatedText;
+                    })
+                    .catch(error => {
+                        throw new Error('Translation failed: ' + error.message);
+                    });
+            }
+
+            function translateDeepl(inputText, sourceLang, targetLang) {
+                return fetch('/deepl/v2/translate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            text: [inputText],
+                            source_lang: sourceLang,
+                            target_lang: targetLang
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.error);
+                        }
+                        return data.translations[0].text;
+                    })
+                    .catch(error => {
+                        throw new Error('Translation failed: ' + error.message);
+                    });
+            }
+
+            function translateDeeplx(inputText, sourceLang, targetLang) {
+                return fetch('/deeplx/v1/translate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            text: inputText,
+                            source_lang: sourceLang,
+                            target_lang: targetLang
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.error);
+                        }
+                        return data.data;
+                    })
+                    .catch(error => {
+                        throw new Error('Translation failed: ' + error.message);
                     });
             }
 
             function init() {
                 loadText();
                 loadLanguages();
+                loadSchema();
             }
 
             function loadLanguages() {
@@ -187,6 +301,20 @@
                     }).finally(() => {
                         detectButton.disabled = false;
                     });
+            }
+
+            function changeSchema() {
+                schema = schemaSelect.value;
+                localStorage.setItem('schema', schema);
+            }
+
+            function loadSchema() {
+                const savedSchema = localStorage.getItem('schema');
+
+                if (savedSchema) {
+                    schemaSelect.value = savedSchema;
+                    changeSchema();
+                }
             }
         </script>
     </x-slot>
