@@ -71,6 +71,10 @@ class OpenAIClient implements ChatClient
             $request['frequency_penalty'] = $this->frequencyPenalty;
         }
 
-        return $this->client->chat()->create($request)->choices[0]->message->content ?? '';
+        try {
+            return $this->client->chat()->create($request)->choices[0]->message->content ?? '';
+        } catch (\Throwable $e) {
+            throw OpenAIException::fromPrevious($e);
+        }
     }
 }

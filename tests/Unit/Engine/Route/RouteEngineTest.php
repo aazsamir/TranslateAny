@@ -7,6 +7,7 @@ namespace Tests\Unit\Engine\Route;
 use App\Engine\Noop\NoopDetectEngine;
 use App\Engine\Noop\NoopTranslateEngine;
 use App\Engine\Route\RouteEngine;
+use App\Engine\Route\RouteException;
 use App\Engine\Route\TranslateRoute;
 use App\Engine\TranslatePayload;
 use App\Engine\Translation;
@@ -77,7 +78,7 @@ class RouteEngineTest extends TestCase
 
         $engine = new RouteEngine([], new MemoryLogger());
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RouteException::class);
 
         $engine->translate($payload);
     }

@@ -75,7 +75,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
 
         if (isset($response['error'])) {
             // @phpstan-ignore-next-line
-            throw new \RuntimeException('Error: ' . $response['error']);
+            throw new LibreTranslateException('Error: ' . $response['error']);
         }
 
         $detections = [];
@@ -147,7 +147,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
         );
 
         if (isset($response['error'])) {
-            throw new \RuntimeException('Error: ' . $response['error']);
+            throw new LibreTranslateException('Error: ' . $response['error']);
         }
 
         return new Translation(
@@ -181,7 +181,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
 
         if (isset($response['error'])) {
             // @phpstan-ignore-next-line
-            throw new \RuntimeException('Error: ' . $response['error']);
+            throw new LibreTranslateException('Error: ' . $response['error']);
         }
 
         $languages = [];

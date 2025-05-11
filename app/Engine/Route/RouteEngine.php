@@ -57,7 +57,7 @@ readonly class RouteEngine implements TranslateEngine
             }
         }
 
-        throw new \RuntimeException('Language not supported');
+        throw new RouteException('Language not supported');
     }
 
     public function languages(): array

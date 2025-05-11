@@ -73,6 +73,11 @@ class OllamaClient implements ChatClient
             body: json_encode($request, flags: JSON_THROW_ON_ERROR),
         );
         $response = $this->client->sendRequest($request);
+
+        if ($response->getStatusCode() !== 200) {
+            throw OllamaException::fromResponse($response);
+        }
+
         /**
          * @var array{
          *  message: array{
