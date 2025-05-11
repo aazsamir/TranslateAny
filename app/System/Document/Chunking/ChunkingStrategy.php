@@ -8,7 +8,7 @@ interface ChunkingStrategy
 {
     /**
      * @param iterable<int, string> $pages
-     * 
+     *
      * @return iterable<Chunk>
      */
     public function chunk(iterable $pages): iterable;

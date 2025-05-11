@@ -6,12 +6,13 @@ namespace App\System\Document\Chunking;
 
 class FullPageStrategy implements ChunkingStrategy
 {
-    private const WINDOW_SIZE = 2;
+    private const int WINDOW_SIZE = 2;
 
     public function chunk(iterable $pages): iterable
     {
         $pages = iterator_to_array($pages, false);
         $pagesWindow = [];
+        $i = 0;
 
         foreach ($pages as $i => $text) {
             $text = $this->cleanPage($text);
@@ -45,6 +46,9 @@ class FullPageStrategy implements ChunkingStrategy
         return implode("\n", $lines);
     }
 
+    /**
+     * @param array<int, string> $pages
+     */
     private function handlePagesWindow(array &$pages): string
     {
         $page = &$pages[0];
@@ -70,7 +74,7 @@ class FullPageStrategy implements ChunkingStrategy
 
         if ($lastPhrasePos !== false) {
             $lastPhrase = substr($lastLine, $lastPhrasePos + 1);
-            
+
             // remove this phrase from the page
             $lines[] = substr($lastLine, 0, $lastPhrasePos + 1);
 

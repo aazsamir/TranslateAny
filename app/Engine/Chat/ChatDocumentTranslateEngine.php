@@ -10,6 +10,8 @@ use App\Engine\DocumentTranslation;
 use App\System\Chat\TextTrimmer;
 use App\System\Document\Chunking\ChunkingStrategyFactory;
 use App\System\Document\DocumentStorage;
+use App\System\Document\FileDocumentStorage;
+use App\System\Document\SimpleTextExtractor;
 use App\System\Document\TextExtractor;
 use App\System\Logger\PrefixLogger;
 use ReflectionClass;
@@ -40,8 +42,8 @@ readonly class ChatDocumentTranslateEngine implements DocumentTranslateEngine
             $object->__construct(
                 client: $client,
                 systemPrompt: $systemPrompt,
-                textExtractor: new TextExtractor(),
-                documentStorage: new DocumentStorage(),
+                textExtractor: new SimpleTextExtractor(),
+                documentStorage: new FileDocumentStorage(),
                 logger: get(Logger::class),
                 chunkingStrategyFactory: get(ChunkingStrategyFactory::class),
             );
@@ -75,7 +77,7 @@ readonly class ChatDocumentTranslateEngine implements DocumentTranslateEngine
                 ),
                 [
                     'chunk' => $i,
-                    'page' => $chunk->page
+                    'page' => $chunk->page,
                 ],
             );
             $messages = [];

@@ -11,9 +11,9 @@ use Tempest\Http\Upload;
 #[Autowire]
 class SimpleTextExtractor implements TextExtractor
 {
-    public function __construct(
-        private bool $moveFiles = true,
-    ) {}
+    public function __construct()
+    {
+    }
 
     /**
      * @return iterable<int, string>

@@ -9,5 +9,6 @@ readonly class Chunk
     public function __construct(
         public int $page,
         public string $text,
-    ) {}
+    ) {
+    }
 }

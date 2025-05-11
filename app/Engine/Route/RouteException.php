@@ -8,5 +8,4 @@ use App\Engine\Chat\ChatException;
 
 class RouteException extends ChatException
 {
-    
 }
