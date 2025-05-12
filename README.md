@@ -1,6 +1,6 @@
 # TranslateAny
 
-TranslateAny is a project that turns any OpenAI compatible system into translate engine, exposing API compatible with Google Translate, DeepL and LibreTranslate.
+TranslateAny is a project that turns any OpenAI compatible system (and more!) into translate engine, exposing API compatible with Google Translate, DeepL and LibreTranslate.
 
 # Usage
 
@@ -55,7 +55,6 @@ docker compose run --rm translateany php tempest create-config
 
 Copy `app/Config/app.config.php.example` to `app/Config/app.config.php`.
 ```php
-<?php
 // app/Config/app.config.php
 use App\Engine\Chat\ChatEngine;
 use App\Engine\OpenAI\OpenAIClient;
@@ -75,7 +74,6 @@ return new AppConfig(
 
 You may use different engines depending on target language by wrapping them in `RouteEngine`.
 ```php
-<?php
 // app/Config/app.config.php
 use App\Engine\Chat\ChatEngine;
 use App\Engine\OpenAI\OpenAIClient;
@@ -109,7 +107,6 @@ return new AppConfig(
 
 Depending on your needs, you may want to cache the translation results. You can do this by using `CacheEngine`
 ```php
-<?php
 // app/Config/app.config.php
 use App\Engine\Cache\CacheEngine;
 use App\Engine\Chat\ChatEngine;
@@ -128,7 +125,6 @@ return new AppConfig(
 
 To access language detection, configure `detection` in `app/Config/app.config.php`:
 ```php
-<?php
 // app/Config/app.config.php
 use App\Engine\Chat\ChatDetectEngine;
 use App\Engine\OpenAI\OpenAIClient;
@@ -143,6 +139,7 @@ return new AppConfig(
 
 If you are using Ollama and need better control over the model, use `OllamaClient`.
 ```php
+// app/Config/app.config.php
 use App\Engine\Chat\ChatEngine;
 use App\Engine\Ollama\OllamaClient;
 use App\Engine\Ollama\OllamaSettings;
@@ -158,6 +155,21 @@ return new AppConfig(
                 stop: ["\n"],
             ),
         ),
+    ),
+);
+```
+
+You can use [translateLocally](https://github.com/XapaJIaMnu/translateLocally) for Marian/Bergamot models.
+Set `TranslateLocallyEngine` and provide a path to binary.
+```php
+// app/Config/app.config.php
+use App\Engine\TranslateLocally\TranslateLocallyEngine;
+use App\System\AppConfig;
+
+return new AppConfig(
+    translate: TranslateLocallyEngine::new(
+        binPath: '/usr/local/bin/translateLocally',
+        defaultModel: 'en-pl-tiny',
     ),
 );
 ```
@@ -193,6 +205,7 @@ TranslateAny exposes schema from different translation providers and differentat
 - ✅ OpenAI Compatible API Translation Engine
 - ✅ LibreTranslate Translation Engine
 - ✅ Native Ollama Translation Engine
+- ✅ Bergamot (Marian) Translation Engine, thanks to [translateLocally](https://github.com/XapaJIaMnu/translateLocally)
 - ❌ Native Llama.cpp Translation Engine
 - ❌ Native vLLM Translation Engine
 - ❌ Google Translate Translation Engine
