@@ -1,7 +1,11 @@
 <x-base>
     <div class="row">
-        <div class="col">
-            <select id="schema" class="form-select form-select-lg">
+        <div class="col d-flex">
+            <div class="form-check form-switch mx-2 align-content-center">
+                <input class="form-check-input" type="checkbox" id="realtime" checked>
+                <label class="form-check-label" for="realtime">Realtime</label>
+            </div>
+            <select id="schema" class="form-select form-select-sm">
                 <option value="libre">LibreTranslate</option>
                 <option value="googlev2">Google Translate v2</option>
                 <option value="deepl">DeepL</option>
@@ -48,11 +52,16 @@
             const swapButton = document.getElementById('swap');
             const detectButton = document.getElementById('detect');
             const schemaSelect = document.getElementById('schema');
+            const realtimeCheckbox = document.getElementById('realtime');
 
             var schema = 'libre';
+            var translationAbortController = new AbortController();
+            var signal = translationAbortController.signal;
+            var timeout = null;
 
             translateButton.addEventListener('click', translate);
             input.addEventListener('input', saveText);
+            input.addEventListener('input', realtimeTranslate);
             output.addEventListener('input', saveText);
             sourceSelect.addEventListener('change', saveLanguages);
             targetSelect.addEventListener('change', saveLanguages);
@@ -63,6 +72,12 @@
             init();
 
             function translate() {
+                if (signal) {
+                    translationAbortController.abort();
+                    translationAbortController = new AbortController();
+                    signal = translationAbortController.signal;
+                }
+
                 const inputText = input.value.trim();
                 const sourceLang = sourceSelect.value;
                 const targetLang = targetSelect.value;
@@ -102,6 +117,8 @@
                         translateButton.disabled = false;
                         saveText();
                     });
+
+                return translation;
             }
 
             function translateLibre(inputText, sourceLang, targetLang) {
@@ -114,16 +131,22 @@
                             q: inputText,
                             source: sourceLang,
                             target: targetLang
-                        })
+                        }),
+                        signal: translationAbortController.signal
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
                             throw new Error(data.error);
                         }
+
                         return data.translatedText;
                     })
                     .catch(error => {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+
                         throw new Error('Translation failed: ' + error.message);
                     });
             }
@@ -138,7 +161,8 @@
                             q: input,
                             source: sourceLang,
                             target: targetLang
-                        })
+                        }),
+                        signal: translationAbortController.signal
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -149,6 +173,10 @@
                         return data.data.translations[0].translatedText;
                     })
                     .catch(error => {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+
                         throw new Error('Translation failed: ' + error.message);
                     });
             }
@@ -163,16 +191,22 @@
                             text: [inputText],
                             source_lang: sourceLang,
                             target_lang: targetLang
-                        })
+                        }),
+                        signal: translationAbortController.signal
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
                             throw new Error(data.error);
                         }
+
                         return data.translations[0].text;
                     })
                     .catch(error => {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+
                         throw new Error('Translation failed: ' + error.message);
                     });
             }
@@ -187,7 +221,8 @@
                             text: inputText,
                             source_lang: sourceLang,
                             target_lang: targetLang
-                        })
+                        }),
+                        signal: translationAbortController.signal
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -197,6 +232,10 @@
                         return data.data;
                     })
                     .catch(error => {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+
                         throw new Error('Translation failed: ' + error.message);
                     });
             }
@@ -315,6 +354,18 @@
                     schemaSelect.value = savedSchema;
                     changeSchema();
                 }
+            }
+
+            function realtimeTranslate() {
+                if (!realtimeCheckbox.checked) {
+                    return;
+                }
+
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+
+                timeout = setTimeout(() => translate(), 1000);
             }
         </script>
     </x-slot>
