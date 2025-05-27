@@ -9,3 +9,4 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./app/Config:/var/www/html/app/Config
+    restart: always
