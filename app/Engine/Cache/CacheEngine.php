@@ -88,7 +88,7 @@ readonly class CacheEngine implements TranslateEngine
         $this->cache->put(
             key: $key,
             value: $translation,
-            expiresAt: DateTime::now()->plusMinutes($this->cacheMinutes),
+            expiration: DateTime::now()->plusMinutes($this->cacheMinutes),
         );
 
         return $translation;

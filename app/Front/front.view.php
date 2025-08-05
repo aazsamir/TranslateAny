@@ -1,4 +1,4 @@
-<x-base>
+<x-layout>
     <div class="row">
         <div class="col d-flex">
             <div class="form-check form-switch mx-2 align-content-center">
@@ -369,4 +369,4 @@
             }
         </script>
     </x-slot>
-</x-base>
+</x-layout>

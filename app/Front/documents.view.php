@@ -1,4 +1,4 @@
-<x-base>
+<x-layout>
     <div class="row flex-grow-1" style="height:100%;">
         <div class="col-12">
             <form method="post" enctype="multipart/form-data" action="/deepl/v2/document">
@@ -12,4 +12,4 @@
             </form>
         </div>
     </div>
-</x-base>
+</x-layout>

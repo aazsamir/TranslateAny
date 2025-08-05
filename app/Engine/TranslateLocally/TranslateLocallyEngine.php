@@ -15,14 +15,15 @@ class TranslateLocallyEngine implements TranslateEngine
 {
     public function __construct(
         private string $binPath,
-        private string $defaultModel = "en-pl-tiny",
-    ) {}
+        private string $defaultModel = 'en-pl-tiny',
+    ) {
+    }
 
     public static function new(
         string $binPath,
-        string $defaultModel = "en-pl-tiny",
-    ): static {
-        return new static(
+        string $defaultModel = 'en-pl-tiny',
+    ): self {
+        return new self(
             binPath: $binPath,
             defaultModel: $defaultModel,
         );
@@ -33,7 +34,7 @@ class TranslateLocallyEngine implements TranslateEngine
         $cli = new Process(
             [
                 $this->binPath,
-                "-m",
+                '-m',
                 $this->modelByPayload($payload),
             ],
         );
@@ -42,7 +43,7 @@ class TranslateLocallyEngine implements TranslateEngine
         $output = $cli->run();
 
         if ($output !== 0) {
-            throw new \RuntimeException("Translation failed");
+            throw new \RuntimeException('Translation failed');
         }
 
         $result = $cli->getOutput();
@@ -66,7 +67,7 @@ class TranslateLocallyEngine implements TranslateEngine
                 // -> en-pl-tiny
                 $matches = [];
                 \preg_match(
-                    "/To invoke do -m ([a-zA-Z0-9-]+)/",
+                    '/To invoke do -m ([a-zA-Z0-9-]+)/',
                     $lang,
                     $matches,
                 );
@@ -87,17 +88,14 @@ class TranslateLocallyEngine implements TranslateEngine
 
         foreach (Language::cases() as $case) {
             foreach ($languages as $lang) {
-                if (
-                    str_contains($lang, $case->value)
-                    && $case->notIn($available)
-                ) {
+                if (str_contains($lang, $case->value) && $case->notIn($available)) {
                     $available[] = $case;
                 }
             }
         }
 
         return array_map(
-            static fn(Language $lang) => new AvailableLanguage(
+            static fn (Language $lang) => new AvailableLanguage(
                 language: $lang,
                 targets: $available,
             ),
@@ -113,7 +111,7 @@ class TranslateLocallyEngine implements TranslateEngine
         $cli = new Process(
             [
                 $this->binPath,
-                "-l",
+                '-l',
             ],
         );
 
@@ -121,7 +119,7 @@ class TranslateLocallyEngine implements TranslateEngine
         $output = $cli->run();
 
         if ($output !== 0) {
-            throw new \RuntimeException("Failed to get languages");
+            throw new \RuntimeException('Failed to get languages');
         }
 
         $result = $cli->getOutput();

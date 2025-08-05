@@ -9,3 +9,4 @@ vendor/
 tests-coverage
 log
 docker-compose.override.yml
+.tempest

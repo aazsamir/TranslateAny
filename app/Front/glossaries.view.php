@@ -1,4 +1,4 @@
-<x-base>
+<x-layout>
     <div class="row flex-grow-1">
         <div class="col-6">
             <form method="post" enctype="multipart/form-data" action="/deepl/v2/glossaries" class="w-100" id="glossaryForm">
@@ -118,4 +118,4 @@
             }
         </script>
     </x-slot>
-</x-base>
+</x-layout>
