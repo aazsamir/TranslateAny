@@ -63,9 +63,22 @@ class ChatEngineTest extends TestCase
         $message = $messages[0];
         $this->assertEquals('system', $message->role);
         $this->assertEquals(
-            "system glossary\n- hello => hej",
+            "system\nglossary\n- hello => hej",
             $message->content,
         );
+    }
+
+    public function testTranslateWithContext(): void
+    {
+        $payload = TranslatePayloadFixture::get(
+            context: 'context',
+        );
+
+        $this->engine->translate($payload);
+        $messages = $this->client->gotMessages;
+        $message = $messages[0];
+
+        $this->assertEquals("system\ncontext", $message->content);
     }
 
     public function testLanguages(): void

@@ -11,9 +11,14 @@ class Prompter
 {
     public static function systemWithGlossary(
         string $systemPrompt,
-        ?string $glossaryPrompt,
-        ?Glossary $glossary,
+        ?string $context = null,
+        ?string $glossaryPrompt = null,
+        ?Glossary $glossary = null,
     ): string {
+        if ($context !== null) {
+            $systemPrompt .= "\n" . $context;
+        }
+
         if ($glossary === null) {
             return $systemPrompt;
         }
@@ -26,7 +31,7 @@ class Prompter
             $glossaryPrompt .= "\n- $source => $target";
         }
 
-        $systemPrompt .= ' ' . $glossaryPrompt;
+        $systemPrompt .= "\n" . $glossaryPrompt;
 
         return $systemPrompt;
     }

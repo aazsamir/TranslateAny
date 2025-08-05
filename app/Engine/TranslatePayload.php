@@ -15,6 +15,7 @@ readonly class TranslatePayload
         public ?string $format = null,
         public ?int $alternatives = null,
         public ?string $glossaryId = null,
+        public ?string $context = null,
     ) {
     }
 }

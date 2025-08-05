@@ -55,6 +55,7 @@ class ChatEngine implements TranslateEngine
             role: 'system',
             content: Prompter::systemWithGlossary(
                 systemPrompt: $this->systemPrompt,
+                context: $payload->context,
                 glossaryPrompt: $this->glossaryPrompt,
                 glossary: $this->glossaryRepository->get($payload->glossaryId),
             ),

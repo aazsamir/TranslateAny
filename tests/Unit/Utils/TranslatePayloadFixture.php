@@ -16,6 +16,7 @@ class TranslatePayloadFixture
         ?string $format = null,
         ?int $alternatives = null,
         ?string $glossaryId = null,
+        ?string $context = null,
     ): TranslatePayload {
         return new TranslatePayload(
             text: $text,
@@ -24,6 +25,7 @@ class TranslatePayloadFixture
             format: $format,
             alternatives: $alternatives,
             glossaryId: $glossaryId,
+            context: $context,
         );
     }
 }
