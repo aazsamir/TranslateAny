@@ -14,7 +14,8 @@ class TextTrimmer
 
         $text = preg_replace('/<think>.*?<\/think>/s', '', $text) ?? '';
         $text = preg_replace('/<thinking>.*?<\/thinking>/s', '', $text) ?? '';
-        $text = trim($text);
+        $text = str_replace(['<think>', '</think>', '<thinking>', '</thinking>'], '', $text);
+        $text = trim($text, "\n\r\t\v\0 #");
 
         return $text;
     }

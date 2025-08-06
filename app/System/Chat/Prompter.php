@@ -38,7 +38,12 @@ class Prompter
 
     public static function translatePrompt(TranslatePayload $payload): string
     {
-        return 'Translate to ' . $payload->targetLanguage->value . ' language:\n' . $payload->text;
+        $prompt = 'Translate to ' . $payload->targetLanguage->value . ' language:\n';
+        $prompt .= '###';
+        $prompt .= $payload->text;
+        $prompt .= '###';
+
+        return $prompt;
     }
 
     public static function detectPrompt(string $text): string
