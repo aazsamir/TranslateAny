@@ -21,6 +21,18 @@ composer install
 ./tempest serve --host=0.0.0.0 --port=8000
 ```
 
+using `docker`
+```
+docker run \
+  --rm \
+  --add-host=host.docker.internal:host-gateway \
+  -p 8000:80 \
+  -e TRANSLATE_ANY_HOST=http://host.docker.internal:11434/v1 \
+  -e TRANSLATE_ANY_MODEL=hf.co/bartowski/aya-expanse-8b-GGUF:IQ4_XS \
+  aazsamir/translate-any:latest
+```
+> **_NOTE:_** Use `TRANSLATE_ANY_HOST` and `TRANSLATE_ANY_MODEL` environment variables to easily configure TranslateAny running in docker, or pass `/var/www/html/config/app.config.php` config file during build or as a volume. By default they are set to `http://host.docker.internal:11434/v1` and `hf.co/bartowski/aya-expanse-8b-GGUF:IQ4_XS` model.
+
 Now, on `http://localhost:8000` you can test your configuration in playground.
 
 Or use `translate` command to test your configuration.
