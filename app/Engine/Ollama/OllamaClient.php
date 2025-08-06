@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Engine\Ollama;
 
 use App\Engine\Chat\ChatClient;
+use App\System\PsrClientFactory;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
 
@@ -28,7 +29,7 @@ class OllamaClient implements ChatClient
         $lazy = new \ReflectionClass(self::class);
         $lazy = $lazy->newLazyGhost(function (OllamaClient $object) use ($model, $host, $settings, $keepAlive) {
             $object->__construct(
-                client: new \GuzzleHttp\Client(),
+                client: PsrClientFactory::new(),
                 model: $model,
                 host: $host,
                 settings: $settings,

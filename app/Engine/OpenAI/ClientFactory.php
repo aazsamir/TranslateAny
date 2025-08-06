@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Engine\OpenAI;
 
+use App\System\PsrClientFactory;
 use OpenAI\Contracts\ClientContract;
 
 readonly class ClientFactory
@@ -14,7 +15,7 @@ readonly class ClientFactory
 
         $factory = \OpenAI::factory()
             ->withBaseUri($host)
-            ->withHttpClient(new \GuzzleHttp\Client(['timeout' => 0]));
+            ->withHttpClient(PsrClientFactory::new());
 
         if ($apiKey) {
             $factory->withApiKey($apiKey);

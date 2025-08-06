@@ -12,6 +12,7 @@ use App\Engine\TranslatePayload;
 use App\Engine\Translation;
 use App\System\Language;
 use App\System\Logger\PrefixLogger;
+use App\System\PsrClientFactory;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
 use ReflectionClass;
@@ -40,7 +41,7 @@ readonly class LibreTranslateEngine implements TranslateEngine, DetectEngine
         $lazy = $lazy->newLazyGhost(function (LibreTranslateEngine $object) use ($host, $apiKey) {
             $object->__construct(
                 host: $host,
-                client: new \GuzzleHttp\Client(),
+                client: PsrClientFactory::new(),
                 apiKey: $apiKey,
                 logger: get(Logger::class),
             );
