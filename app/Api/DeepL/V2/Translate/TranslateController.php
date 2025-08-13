@@ -38,6 +38,7 @@ readonly class TranslateController
                     targetLanguage: Language::fromAny($request->target_lang),
                     sourceLanguage: Language::tryFromAny($request->source_lang),
                     glossaryId: $request->glossary_id,
+                    context: $request->context,
                 ),
             );
         }
