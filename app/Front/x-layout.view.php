@@ -55,7 +55,7 @@
                 <h1>TranslateAny</h1>
                 <div>
                     <a href="/" class="btn btn-primary mx-2">Home</a>
-                    <a href="/glossaries" class="btn btn-primary mx-2">Glossaries</a>
+                    <!-- <a href="/glossaries" class="btn btn-primary mx-2">Glossaries</a> -->
                     <button class="btn btn-secondary mx-2" id="theme-toggle">Theme</button>
                 </div>
             </div>
