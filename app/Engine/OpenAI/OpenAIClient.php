@@ -15,6 +15,7 @@ class OpenAIClient implements ChatClient
         private ?float $temperature = null,
         private ?float $topP = null,
         private ?float $frequencyPenalty = null,
+        private ?int $maxTokens = null,
     ) {
     }
 
@@ -25,9 +26,10 @@ class OpenAIClient implements ChatClient
         ?float $temperature = null,
         ?float $topP = null,
         ?float $frequencyPenalty = null,
+        ?int $maxTokens = null,
     ): self {
         $lazy = new \ReflectionClass(self::class);
-        $lazy = $lazy->newLazyGhost(function (OpenAIClient $object) use ($model, $host, $apiKey, $temperature, $topP, $frequencyPenalty) {
+        $lazy = $lazy->newLazyGhost(function (OpenAIClient $object) use ($model, $host, $apiKey, $temperature, $topP, $frequencyPenalty, $maxTokens) {
             $object->__construct(
                 client: ClientFactory::make(
                     host: $host,
@@ -37,6 +39,7 @@ class OpenAIClient implements ChatClient
                 temperature: $temperature,
                 topP: $topP,
                 frequencyPenalty: $frequencyPenalty,
+                maxTokens: $maxTokens,
             );
         });
 
@@ -69,6 +72,13 @@ class OpenAIClient implements ChatClient
 
         if ($this->frequencyPenalty) {
             $request['frequency_penalty'] = $this->frequencyPenalty;
+        }
+
+        if ($this->maxTokens) {
+            // deprecated field
+            $request['max_tokens'] = $this->maxTokens;
+            // in favor of
+            $request['max_completion_tokens'] = $this->maxTokens;
         }
 
         try {
