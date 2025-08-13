@@ -15,7 +15,7 @@ $translateHost = env('TRANSLATE_ANY_HOST', $defaultHost);
 $detectionHost = env('TRANSLATE_ANY_DETECTION_HOST', $translateHost);
 $documentHost = env('TRANSLATE_ANY_DOCUMENT_HOST', $translateHost);
 
-$defaultModel = 'hf.co/bartowski/aya-expanse-8b-GGUF:IQ4_XS';
+$defaultModel = 'hf.co/unsloth/gemma-3-12b-it-GGUF:IQ4_XS';
 $translateModel = env('TRANSLATE_ANY_MODEL', $defaultModel);
 $detectionModel = env('TRANSLATE_ANY_DETECTION_MODEL', $translateModel);
 $documentModel = env('TRANSLATE_ANY_DOCUMENT_MODEL', $translateModel);

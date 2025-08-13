@@ -31,7 +31,7 @@ docker run \
   -e TRANSLATE_ANY_MODEL=hf.co/bartowski/aya-expanse-8b-GGUF:IQ4_XS \
   aazsamir/translate-any:latest
 ```
-> **_NOTE:_** Use `TRANSLATE_ANY_HOST` and `TRANSLATE_ANY_MODEL` environment variables to easily configure TranslateAny running in docker, or pass `/var/www/html/config/app.config.php` config file during build or as a volume. By default they are set to `http://host.docker.internal:11434/v1` and `hf.co/bartowski/aya-expanse-8b-GGUF:IQ4_XS` model.
+> **_NOTE:_** Use `TRANSLATE_ANY_HOST` and `TRANSLATE_ANY_MODEL` environment variables to easily configure TranslateAny running in docker, or pass `/var/www/html/config/app.config.php` config file during build or as a volume. By default they are set to `http://host.docker.internal:11434/v1` and `hf.co/unsloth/gemma-3-12b-it-GGUF:IQ4_XS` model.
 
 Now, on `http://localhost:8000` you can test your configuration in playground.
 
