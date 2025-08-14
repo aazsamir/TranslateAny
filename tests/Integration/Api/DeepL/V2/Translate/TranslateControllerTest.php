@@ -13,6 +13,38 @@ class TranslateControllerTest extends TestCase
         $response = $this->http->post(
             '/deepl/v2/translate',
             [
+                'text' => 'Hello, world!',
+                'source_lang' => 'en',
+                'target_lang' => 'pl',
+            ],
+            headers: [
+                'Authorization' => 'DeepL-Auth-Key test',
+            ],
+        );
+
+        $response->assertOk();
+        $body = $response->body;
+
+        $this->isArray($body);
+        $this->assertSame(
+            [
+                'translations' => [
+                    [
+                        'text' => 'Hello, world!',
+                        'detected_source_language' => 'EN',
+                        'billed_characters' => 0,
+                    ],
+                ],
+            ],
+            $body,
+        );
+    }
+
+    public function testWithArray(): void
+    {
+        $response = $this->http->post(
+            '/deepl/v2/translate',
+            [
                 'text' => [
                     'Hello, world!',
                 ],

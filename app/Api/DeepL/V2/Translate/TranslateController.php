@@ -31,7 +31,9 @@ readonly class TranslateController
     {
         $translations = [];
 
-        foreach ($request->text as $text) {
+        $texts = is_array($request->text) ? $request->text : [$request->text];
+
+        foreach ($texts as $text) {
             $translations[] = $this->translate->translate(
                 new TranslatePayload(
                     text: $text,

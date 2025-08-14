@@ -12,7 +12,7 @@ class TranslateRequest implements Request
     use IsRequest;
 
     /** @var string[] */
-    public array $text;
+    public string|array $text;
     public ?string $source_lang = null;
     public string $target_lang;
     public ?string $context = null;
