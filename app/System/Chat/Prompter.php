@@ -38,6 +38,12 @@ class Prompter
 
     public static function translatePrompt(TranslatePayload $payload): string
     {
+        if ($payload->sourceLanguage !== null) {
+            $prompt = 'Translate from ' . $payload->sourceLanguage->value . ' to ' . $payload->targetLanguage->value . ' language:\n';
+        } else {
+            $prompt = 'Translate to ' . $payload->targetLanguage->value . ' language:\n';
+        }
+
         $prompt = 'Translate to ' . $payload->targetLanguage->value . ' language:\n';
         $prompt .= '###';
         $prompt .= $payload->text;

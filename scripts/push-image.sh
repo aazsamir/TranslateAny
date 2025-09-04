@@ -1,6 +1,6 @@
 #!/bin/sh
 
-tag="0.3"
+tag="0.4"
 docker build -t aazsamir/translate-any:$tag -f Dockerfile .
 docker push aazsamir/translate-any:$tag
 docker tag aazsamir/translate-any:$tag aazsamir/translate-any:latest
