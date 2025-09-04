@@ -16,7 +16,7 @@ class PsrClientFactory
     ): ClientInterface {
         return new Client([
             RequestOptions::TIMEOUT => $timeout ?? 0,
-            RequestOptions::CONNECT_TIMEOUT => $connectTimeout
+            RequestOptions::CONNECT_TIMEOUT => $connectTimeout,
         ]);
     }
 }

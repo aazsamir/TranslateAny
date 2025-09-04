@@ -11,13 +11,19 @@ use App\System\AppConfig;
 use function Tempest\env;
 
 $defaultHost = 'http://host.docker.internal:11434/v1';
+/** @var string */
 $translateHost = env('TRANSLATE_ANY_HOST', $defaultHost);
+/** @var string */
 $detectionHost = env('TRANSLATE_ANY_DETECTION_HOST', $translateHost);
+/** @var string */
 $documentHost = env('TRANSLATE_ANY_DOCUMENT_HOST', $translateHost);
 
 $defaultModel = 'hf.co/unsloth/gemma-3-12b-it-GGUF:IQ4_XS';
+/** @var string */
 $translateModel = env('TRANSLATE_ANY_MODEL', $defaultModel);
+/** @var string */
 $detectionModel = env('TRANSLATE_ANY_DETECTION_MODEL', $translateModel);
+/** @var string */
 $documentModel = env('TRANSLATE_ANY_DOCUMENT_MODEL', $translateModel);
 
 return new AppConfig(
