@@ -44,7 +44,6 @@ class Prompter
             $prompt = 'Translate to ' . $payload->targetLanguage->value . ' language:\n';
         }
 
-        $prompt = 'Translate to ' . $payload->targetLanguage->value . ' language:\n';
         $prompt .= '###';
         $prompt .= $payload->text;
         $prompt .= '###';
